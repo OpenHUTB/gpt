@@ -1,10 +1,5 @@
 # GPT 概述
 
-# Transformer Models for MATLAB
-[![CircleCI](https://img.shields.io/circleci/build/github/matlab-deep-learning/transformer-models?label=tests)](https://app.circleci.com/pipelines/github/matlab-deep-learning/transformer-models)
-
-This repository implements deep learning transformer models in MATLAB.
-
 ## Requirements
 ### BERT and FinBERT
 - MATLAB R2021a or later
@@ -93,11 +88,6 @@ Transformer networks such as GPT-2 can be used to summarize a piece of text. The
 Because lots of these comments themselves contain a summary indicated by the statement "TL;DR" (Too long, didn't read), you can use the transformer model to generate a summary by appending "TL;DR" to the input text. The `generateSummary` function takes the input text, automatically appends the string `"TL;DR"` and generates the summary.
 
 The example [`SummarizeTextUsingTransformersExample.m`](./SummarizeTextUsingTransformersExample.m) shows how to summarize a piece of text using GPT-2.
-
-# 环境配置
-
-## 贡献指南
-在进行代码之前，请阅读 [贡献指南](https://github.com/OpenHUTB/bazaar/blob/master/CONTRIBUTING.md) 文档。
 
 ##  参考
 [参考](https://github.com/matlab-deep-learning/transformer-models)
