@@ -1,4 +1,5 @@
 %% *仿真期间场景中的生成和消失车辆*
+% 参考：https://ww2.mathworks.cn/help/releases/R2022b/driving/ref/drivingscenario.vehicle.html
 % 创建一个驾驶场景。将场景的停止时间设置为 3 秒。
 
 scenario = drivingScenario('StopTime',3);
