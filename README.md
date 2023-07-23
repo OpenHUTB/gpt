@@ -19,16 +19,21 @@ GPT 等 Transformer 网络可用于总结一段文本。
 由于许多这些注释本身包含由语句“TL;DR”（太长，没读）指示的摘要，因此您可以使用转换器模型通过将“TL;DR”附加到输入文本来生成摘要。
 该generateSummary函数接受输入文本，自动附加字符串"TL;DR"并生成摘要。
 
-该示例`transformer/SummarizeTextUsingTransformersExample.m`展示了如何使用 GPT 总结一段文本。
+该示例`transformer/SummarizeTextUsingTransformersExample.m`展示了如何使用 GPT 总结成一个交通场景编辑指令（一段文本）。
+
 
 ### 场景编辑的控制
-拟实现的功能包括：
-1. 增加、删除场景中的车辆、行人等交通参与者；
+
+拟实现的功能包括(Driving Scenario Editor和Roadrunner)：
+1. 增加、删除场景中的车辆、行人等交通参与者，修改交通参与者的属性，查询场景中有多少车（增删改查）；
 2. 场景中车辆加速减速；
-3. 仿真场景运行过程中制造交通事故；
+3. 变道、超车、加塞操作；
+4. 仿真场景运行过程中制造交通事故；
+
 
 
 ## 要求
+
 ### BERT and FinBERT
 - MATLAB R2021a或以上
 - 深度学习工具箱
