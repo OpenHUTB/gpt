@@ -31,7 +31,8 @@ GPT 等 Transformer 网络可用于总结一段文本。
 4. 变道、超车、加塞操作；
 5. 仿真场景运行过程中制造交通事故；
 6. 创建单元测试场景；
-7. [生成三维模型](https://github.com/uezo/ChatdollKit) ；
+7. [以编程方式创建驾驶场景](https://ww2.mathworks.cn/help/driving/ug/create-driving-scenario-programmatically.html) ；
+8. [生成三维模型](https://github.com/uezo/ChatdollKit) ；
 
 
 
