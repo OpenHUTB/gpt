@@ -2,9 +2,9 @@
 
 该工程实现语音控制交通场景的编辑。
 
-## 流程
+# 流程
 
-### 语音识别
+## 语音识别
 
 [使用深度学习训练语音命令识别模型](https://ww2.mathworks.cn/help/releases/R2022b/audio/ug/train-speech-command-recognition-model-using-deep-learning.html)
 
@@ -36,7 +36,7 @@ GPT 等 Transformer 网络可用于总结一段文本。
 
 
 
-## 要求
+# 软件要求
 
 ### BERT and FinBERT
 - MATLAB R2021a或以上
@@ -55,9 +55,9 @@ MATLAB R2020a或以上
 ##  参考
 [matlab 实现 GPT2](https://github.com/matlab-deep-learning/transformer-models)
 
-[代码生成服务](https://github.com/fauxpilot/fauxpilot) 
+[fauxpilot代码生成服务](https://github.com/fauxpilot/fauxpilot) 
 
-[多语言代码生成模型](https://github.com/THUDM/CodeGeeX) 
+[CodeGeezX多语言代码生成模型](https://github.com/THUDM/CodeGeeX) 
 
 [Matlab和OpenAI进行通信的App](https://github.com/toshiakit/MatGPT)
 
