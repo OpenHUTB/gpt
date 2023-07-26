@@ -6,7 +6,7 @@
 
 ## 语音识别
 
-[使用深度学习训练语音命令识别模型](https://ww2.mathworks.cn/help/releases/R2022b/audio/ug/train-speech-command-recognition-model-using-deep-learning.html)
+识别中文语句或者输入的中文句子，参考[使用深度学习训练语音命令识别模型](https://ww2.mathworks.cn/help/releases/R2022b/audio/ug/train-speech-command-recognition-model-using-deep-learning.html)
 
 
 ### 自然语言理解
