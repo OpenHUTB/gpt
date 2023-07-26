@@ -1,6 +1,6 @@
-# 交通场景交互式编辑
+# 交通场景交互式编辑和控制
 
-该工程实现语音控制交通场景的编辑。
+该工程实现语音控制交通场景的编辑和控制。
 
 # 流程
 
@@ -22,7 +22,7 @@ GPT 等 Transformer 网络可用于总结一段文本。
 该示例`transformer/SummarizeTextUsingTransformersExample.m`展示了如何使用 GPT 总结成一个交通场景编辑指令（一段文本）。
 
 
-### 场景编辑的控制
+### 场景编辑和控制
 
 拟实现的功能包括(Driving Scenario Designer和Roadrunner)：
 1. 增加、删除场景中的车辆、行人等交通参与者，修改交通参与者的属性，查询场景中有多少车（增删改查）；
