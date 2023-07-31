@@ -12,7 +12,7 @@
 ## 代码生成
 
 ### 模型微调
-使用matlab软件自带代码和github上的成熟matlab仓库进行模型微调。
+基于[lora](https://github.com/microsoft/LoRA) 使用matlab软件自带代码和github上的成熟matlab仓库进行模型微调。
 
 ### transformer
 使用 GPT 总结文本
