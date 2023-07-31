@@ -9,8 +9,12 @@
 识别中文语句或者输入的中文句子，参考[使用深度学习训练语音命令识别模型](https://ww2.mathworks.cn/help/releases/R2022b/audio/ug/train-speech-command-recognition-model-using-deep-learning.html)
 
 
-### 自然语言理解
+## 代码生成
 
+### 模型微调
+使用matlab软件自带代码和github上的成熟matlab仓库进行模型微调。
+
+### transformer
 使用 GPT 总结文本
 GPT 等 Transformer 网络可用于总结一段文本。
 经过训练的 GPT 转换器可以在给定初始单词序列作为输入的情况下生成文本。
@@ -56,6 +60,8 @@ MATLAB R2020a或以上
 [matlab 实现 GPT2](https://github.com/matlab-deep-learning/transformer-models)
 
 [fauxpilot代码生成服务](https://github.com/fauxpilot/fauxpilot) 
+
+[CodeGeeX2代码生成模型](https://github.com/THUDM/CodeGeeX2) 
 
 [CodeGeezX多语言代码生成模型](https://github.com/THUDM/CodeGeeX) 
 
