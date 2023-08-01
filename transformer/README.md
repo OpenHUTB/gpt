@@ -1,13 +1,15 @@
 # GPT 概述
 
-## Requirements
+## 软件要求
+
 ### BERT and FinBERT
-- MATLAB R2021a or later
-- Deep Learning Toolbox
-- Text Analytics Toolbox
-### GPT-2
-- MATLAB R2020a or later
-- Deep Learning Toolbox
+- MATLAB R2021a或以上
+- 深度学习工具箱
+- 文本分析工具箱
+
+### GPT
+MATLAB R2020a或以上
+深度学习工具箱
 
 ## Getting Started
 Download or [clone](https://www.mathworks.com/help/matlab/matlab_prog/use-source-control-with-projects.html#mw_4cc18625-9e78-4586-9cc4-66e191ae1c2c) this repository to your machine and open it in MATLAB. 
@@ -82,12 +84,17 @@ The example [`PredictMaskedTokensUsingBERT.m`](./PredictMaskedTokensUsingBERT.m)
 
 The example [`PredictMaskedTokensUsingFinBERT.m`](./PredictMaskedTokensUsingFinBERT.m) shows how to predict masked tokens for financial text using and calculate the token probabilities using a pretrained FinBERT model.
 
-## Example: Summarize Text Using GPT-2
-Transformer networks such as GPT-2 can be used to summarize a piece of text. The trained GPT-2 transformer can generate text given an initial sequence of words as input. The model was trained on comments left on various web pages and internet forums.
+### transformer
+使用 GPT 总结文本
+GPT 等 Transformer 网络可用于总结一段文本。
+经过训练的 GPT 转换器可以在给定初始单词序列作为输入的情况下生成文本。
+该模型根据各种网页和互联网论坛上留下的评论进行训练。
 
-Because lots of these comments themselves contain a summary indicated by the statement "TL;DR" (Too long, didn't read), you can use the transformer model to generate a summary by appending "TL;DR" to the input text. The `generateSummary` function takes the input text, automatically appends the string `"TL;DR"` and generates the summary.
+由于许多这些注释本身包含由语句“TL;DR”（太长，没读）指示的摘要，因此您可以使用转换器模型通过将“TL;DR”附加到输入文本来生成摘要。
+该generateSummary函数接受输入文本，自动附加字符串"TL;DR"并生成摘要。
 
-The example [`SummarizeTextUsingTransformersExample.m`](./SummarizeTextUsingTransformersExample.m) shows how to summarize a piece of text using GPT-2.
+该示例`transformer/SummarizeTextUsingTransformersExample.m`展示了如何使用 GPT 总结成一个交通场景编辑指令（一段文本）。
+
 
 ##  参考
 [参考](https://github.com/matlab-deep-learning/transformer-models)

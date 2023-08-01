@@ -9,7 +9,7 @@ import gradio as gr
 from transformers import AutoTokenizer, AutoModel
 
 try:
-    # Should first install fastllm (https://github.com/ztxz16/fastllm.git)
+    # 应该首先安装 fastllm (https://github.com/ztxz16/fastllm.git)
     from fastllm_pytools import llm
     enable_fastllm = True
 except:

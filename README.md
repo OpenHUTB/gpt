@@ -4,29 +4,14 @@
 
 # 流程
 
-## 语音识别
-
-识别中文语句或者输入的中文句子，参考[使用深度学习训练语音命令识别模型](https://ww2.mathworks.cn/help/releases/R2022b/audio/ug/train-speech-command-recognition-model-using-deep-learning.html)
-
-
 ## 代码生成
 
-### 模型微调
-基于[lora](https://github.com/microsoft/LoRA) 使用matlab软件自带代码和github上的成熟matlab仓库进行模型微调。
-
-### transformer
-使用 GPT 总结文本
-GPT 等 Transformer 网络可用于总结一段文本。
-经过训练的 GPT 转换器可以在给定初始单词序列作为输入的情况下生成文本。
-该模型根据各种网页和互联网论坛上留下的评论进行训练。
-
-由于许多这些注释本身包含由语句“TL;DR”（太长，没读）指示的摘要，因此您可以使用转换器模型通过将“TL;DR”附加到输入文本来生成摘要。
-该generateSummary函数接受输入文本，自动附加字符串"TL;DR"并生成摘要。
-
-该示例`transformer/SummarizeTextUsingTransformersExample.m`展示了如何使用 GPT 总结成一个交通场景编辑指令（一段文本）。
+1. 运行脚本`run_demo.py`，并测试生成matlab代码的效果；
+2. 基于[lora](https://github.com/microsoft/LoRA) 使用matlab软件自带代码和github上的成熟matlab仓库进行模型微调。
+3. 根据matlab代码生成对应的交通场景，并在 [编辑器](https://marketplace.visualstudio.com/items?itemName=MathWorks.language-matlab) 中进行集成。
 
 
-### 场景编辑和控制
+## 场景编辑和控制
 
 拟实现的功能包括(Driving Scenario Designer和Roadrunner)：
 1. 增加、删除场景中的车辆、行人等交通参与者，修改交通参与者的属性，查询场景中有多少车（增删改查）；
@@ -38,18 +23,12 @@ GPT 等 Transformer 网络可用于总结一段文本。
 7. [以编程方式创建驾驶场景](https://ww2.mathworks.cn/help/driving/ug/create-driving-scenario-programmatically.html) ；
 8. [生成三维模型](https://github.com/uezo/ChatdollKit) ；
 
+## 语音识别（可选）
+
+识别中文语句或者输入的中文句子，参考[使用深度学习训练语音命令识别模型](https://ww2.mathworks.cn/help/releases/R2022b/audio/ug/train-speech-command-recognition-model-using-deep-learning.html) 。
 
 
-# 软件要求
 
-### BERT and FinBERT
-- MATLAB R2021a或以上
-- 深度学习工具箱
-- 文本分析工具箱
-
-### GPT
-MATLAB R2020a或以上
-深度学习工具箱
 
 # 环境配置
 
