@@ -6,7 +6,7 @@
 
 ## 代码生成
 
-1. 运行脚本`run_demo.py`，并测试生成matlab代码的效果；
+1. 运行大模型matlab代码生成，并测试生成代码的效果；
 2. 基于[lora](https://github.com/microsoft/LoRA) 使用matlab软件自带代码和github上的成熟matlab仓库进行模型微调。
 3. 根据matlab代码生成对应的交通场景，并在 [编辑器](https://marketplace.visualstudio.com/items?itemName=MathWorks.language-matlab) 中进行集成。
 
@@ -31,6 +31,11 @@
 
 
 # 环境配置
+
+## 大模型配置
+
+一键运行大模型对话和代码生成的工具在[百度网盘链接](https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb) 的“学习->大模型”目录下，”WizardLM演示视频.mp4“展示了如何运行和测试这个模型的详细步骤。
+
 
 ## 贡献指南
 在进行代码之前，请阅读 [贡献指南](https://github.com/OpenHUTB/bazaar/blob/master/CONTRIBUTING.md) 文档。
