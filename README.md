@@ -38,7 +38,8 @@
 
 1. 将[百度网盘链接](https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb) 的“学习->大模型->webui”目录中的文件下载；
 2. 解压`python.zip`到`webui/`目录，`WizardCoder-15B-1.0-GPTQ.zip`和`chatglm2-6b.zip`解压到`webui/models`目录下；
-3. 点击`快速启动.exe`运行图形化界面。
+3. 运行`windowsdesktop-runtime-6.0.10-win-x64.exe`安装.Net；
+4. 点击`快速启动.exe`运行图形化界面。
 
 
 ## 贡献指南
