@@ -13,7 +13,7 @@
 
 ## 场景编辑和控制
 
-拟实现的功能包括(Driving Scenario Designer和Roadrunner)：
+拟实现的功能包括（使用自动驾驶场景设计器）：
 1. 增加、删除场景中的车辆、行人等交通参与者，修改交通参与者的属性，查询场景中有多少车（增删改查）；
 2. 将摄像机、激光雷达等传感器放置到某台车上；
 3. 场景中车辆加速减速；
@@ -34,13 +34,19 @@
 
 ## 大模型配置
 
-一键运行大模型对话和代码生成的工具在[百度网盘链接](https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb) 的“学习->大模型”目录下，”WizardLM演示视频.mp4“展示了如何运行和测试这个模型的详细步骤。
+一键运行大模型对话和代码生成的工具在[百度网盘链接](https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb) 的“学习->大模型”目录下，”WizardLM演示视频.mp4“展示了如何运行和测试这个模型的详细步骤。以下是进行代码调试的环境部署步骤：
+
+1. 将[百度网盘链接](https://pan.baidu.com/s/1n2fJvWff4pbtMe97GOqtvQ?pwd=hutb) 的“学习->大模型->webui”目录中的文件下载；
+2. 解压`python.zip`到`webui/`目录，`WizardCoder-15B-1.0-GPTQ.zip`和`chatglm2-6b.zip`解压到`webui/models`目录下；
+3. 点击`快速启动.exe`运行图形化界面。
 
 
 ## 贡献指南
 在进行代码之前，请阅读 [贡献指南](https://github.com/OpenHUTB/bazaar/blob/master/CONTRIBUTING.md) 文档。
 
 ##  参考
+[WizardCoder](https://github.com/nlpxucan/WizardLM/tree/main/WizardCoder) 
+
 [matlab 实现 GPT2](https://github.com/matlab-deep-learning/transformer-models)
 
 [fauxpilot代码生成服务](https://github.com/fauxpilot/fauxpilot) 
