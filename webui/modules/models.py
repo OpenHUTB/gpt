@@ -115,7 +115,13 @@ def load_tokenizer(model_name, model):
         path_to_model = Path(f"{shared.args.model_dir}/{model_name}/")
         if path_to_model.exists():
             tokenizer = AutoTokenizer.from_pretrained(path_to_model, trust_remote_code=shared.args.trust_remote_code)
-
+            try:
+                if 'chatglm' in model_name.lower():
+                    tokenizer.eos_token_id = 2
+                    tokenizer.bos_token_id = 1
+                    tokenizer.pad_token_id = 0
+            except Exception:
+                pass
     return tokenizer
 
 
