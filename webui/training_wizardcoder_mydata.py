@@ -6,16 +6,21 @@
 import argparse
 import sys
 
-sys.path.append('..')
 from codeassist import WizardCoder
 
+sys.path.append('..')
 
+# 执行训练：
 # --do_train  --train_file D:\work\workspace\gpt\webui\data\alpaca_data.json --valid_file D:\work\workspace\gpt\webui\data\alpaca_data.json
+
+# 执行推断：
+# --do_predict
 
 # 加载的本地模型文件位于：
 # C:\Users\Administrator\.cache\huggingface\hub\models--WizardLM--WizardCoder-15B-V1.0\snapshots\926ca1b215c4631bc5f8c3e47173381452c23e5c
 
 # 必须指定绝对路径，否则报错：FileNotFoundError: Unable to find 'D:\work\workspace\gpt\webui\data/code_alpaca_20k_50.jsonl' at D:\work\workspace\gpt\webui
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="WizardLM/WizardCoder-15B-V1.0",
@@ -40,6 +45,7 @@ if __name__ == '__main__':
             batch_size=args.batch_size
         )
         print(f"model saved to {args.output_dir}")
+
     if args.do_predict:
         model = WizardCoder(model_name_or_path=args.model_name, peft_name=args.output_dir)
         prompts = [
