@@ -48,6 +48,8 @@
 ##  参考
 [WizardCoder](https://github.com/nlpxucan/WizardLM/tree/main/WizardCoder) 
 
+[WebUI整合包视频](https://www.bilibili.com/video/BV1jj411S7YD)
+
 [matlab 实现 GPT2](https://github.com/matlab-deep-learning/transformer-models)
 
 [fauxpilot代码生成服务](https://github.com/fauxpilot/fauxpilot) 
