@@ -11,7 +11,7 @@ def load_quantized(model_name):
     path_to_model = Path(f'{shared.args.model_dir}/{model_name}')
     pt_path = None
 
-    # Find the model checkpoint
+    # 寻找模型的检查点
     if shared.args.checkpoint:
         pt_path = Path(shared.args.checkpoint)
     else:

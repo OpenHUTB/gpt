@@ -174,17 +174,26 @@ python download-model.py EleutherAI/gpt-j-6B --text-only
 When you load this model in default or notebook modes, the "HTML" tab will show the generated text in 4chan format.
 </details>
 
-## Starting the web UI
+## 程序运行
 
-    conda activate textgen
-    cd text-generation-webui
-    python server.py
+### 代码生成的网页端启动
 
-Then browse to 
+双击`wizardcoder-启动.bat`，会弹出浏览器并打开地址`http://127.0.0.1:7860/` ，在对话框中进行问答。
+比如在输入框中输入`使用matlab写一个冒泡排序算法`，然后回车（或点击`Generate`），将会生成Matlab语言的冒泡排序代码和测试用例。
 
-`http://localhost:7860/?__theme=dark`
 
-Optionally, you can use the following command-line flags:
+### 调试
+初始调试命令（3090显卡测试通过）
+```shell
+python/python server.py --model WizardCoder-15B-1.0-GPTQ --trust-remote-code --chat --auto-launch --load-in-4bit
+```
+
+加载完整版15B模型，24G显存的3090不够。
+```shell
+python/python server.py --model WizardCoder-15B-V1.0 --trust-remote-code --chat --auto-launch
+```
+
+
 
 #### Basic settings
 

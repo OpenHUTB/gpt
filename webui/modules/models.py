@@ -71,6 +71,8 @@ def load_model(model_name, loader=None):
                 return None, None
 
     shared.args.loader = loader
+    # 执行：load_func_map['AutoGPTQ']('WizardCoder-15B-1.0-GPTQ')，
+    # 即执行函数 AutoGPTQ_loader('WizardCoder-15B-1.0-GPTQ')加载模型
     output = load_func_map[loader](model_name)
     if type(output) is tuple:
         model, tokenizer = output
@@ -283,6 +285,7 @@ def GPTQ_loader(model_name):
 def AutoGPTQ_loader(model_name):
     import modules.AutoGPTQ_loader
 
+    # 进行模型加载
     return modules.AutoGPTQ_loader.load_quantized(model_name)
 
 

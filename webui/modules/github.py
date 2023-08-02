@@ -2,6 +2,7 @@ import os
 import subprocess
 
 
+# 从指定链接github_url中下载仓库代码
 def clone_or_pull_repository(github_url):
     repository_folder = "extensions"
     repo_name = github_url.split("/")[-1].split(".")[0]

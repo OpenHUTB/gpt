@@ -1007,13 +1007,13 @@ if __name__ == "__main__":
 
         shared.model_name = available_models[i]
 
-    # If any model has been selected, load it
+    # 如果选择了任何模型，则加载该模型
     if shared.model_name != 'None':
         model_settings = get_model_settings_from_yamls(shared.model_name)
         shared.settings.update(model_settings)  # hijacking the interface defaults
         update_model_parameters(model_settings, initial=True)  # hijacking the command-line arguments
 
-        # Load the model
+        # 加载模型
         shared.model, shared.tokenizer = load_model(shared.model_name)
         if shared.args.lora:
             add_lora_to_model(shared.args.lora)
