@@ -312,8 +312,8 @@ class WizardCoder:
             logger.info(f"Training/evaluation parameters {training_args}")
 
         data_collator = DataCollatorForSupervisedDataset(tokenizer=self.tokenizer)
-        # 报错： NotImplementedError: Cannot copy out of meta tensor; no data!
-        # 通常是由于MetaTensor中没有数据导致的
+        # 在RTX3090上报错： NotImplementedError: Cannot copy out of meta tensor; no data!
+        # 迁移到A6000上训练没有错
         trainer = Trainer(
             model=self.model,
             tokenizer=self.tokenizer,
