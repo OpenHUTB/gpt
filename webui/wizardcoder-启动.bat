@@ -1,0 +1,1 @@
+python\python.exe server.py --model WizardCoder-15B-1.0-GPTQ --trust-remote-code --chat --auto-launch --load-in-4bit

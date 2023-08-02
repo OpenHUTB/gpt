@@ -1,0 +1,1 @@
+python\python.exe server.py --model chatglm2-6b --trust-remote-code --load-in-4bit --chat --auto-launch
