@@ -9,6 +9,7 @@ import sys
 sys.path.append('..')
 from codeassist import WizardCoder
 
+# --do_train  --model_name D:\work\workspace\gpt\webui\models\WizardCoder-15B-1.0-GPTQ
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="WizardLM/WizardCoder-15B-V1.0",
