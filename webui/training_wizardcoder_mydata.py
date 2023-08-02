@@ -10,6 +10,8 @@ from codeassist import WizardCoder
 
 sys.path.append('..')
 
+
+
 # 执行训练：
 # --do_train  --train_file D:\work\workspace\gpt\webui\data\alpaca_data.json --valid_file D:\work\workspace\gpt\webui\data\alpaca_data.json
 
@@ -36,6 +38,9 @@ if __name__ == '__main__':
     parser.add_argument("--output_dir", type=str, default="./outputs-finetuned-wizardcoder/", help="output dir")
     parser.add_argument("--num_epochs", type=int, default=5, help="Num of training epochs")
     parser.add_argument("--batch_size", type=int, default=2, help="Batch size")
+
+    parser.add_argument("--prompt", type=str, default="写个matlab的冒泡排序算法", help="generate code prompt")
+
     args = parser.parse_args()
     print(args)
 
@@ -52,14 +57,18 @@ if __name__ == '__main__':
 
     if args.do_predict:
         model = WizardCoder(model_name_or_path=args.model_name, peft_name=args.output_dir)
-        prompts = [
-            "def load_csv_file(file_path):",
-            "write a C++ code to sum 1 to 12.",
-            "写个python的快排算法",
-            "生成4到400之间的随机数，用java和python写代码",
-        ]
-        for prompt in prompts:
-            outputs = model.generate(prompt)
-            print("Input :", prompt)
-            print("Output:", outputs[0])
-            print("=" * 20)
+
+        outputs = model.generate(args.prompt)
+        print(outputs[0])
+
+        # prompts = [
+        #     "def load_csv_file(file_path):",
+        #     "write a C++ code to sum 1 to 12.",
+        #     "写个python的快排算法",
+        #     "生成4到400之间的随机数，用java和python写代码",
+        # ]
+        # for prompt in prompts:
+        #     outputs = model.generate(prompt)
+        #     print("Input :", prompt)
+        #     print("Output:", outputs[0])
+        #     print("=" * 20)
