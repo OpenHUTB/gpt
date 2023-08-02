@@ -17,7 +17,7 @@ sys.path.append('..')
 
 # 执行推断：
 # --do_predict
-# 需要模型训练的检查点文件
+# 需要将某次模型训练的检查点文件复制到./outputs-finetuned-wizardcoder/目录下，否则出现
 # Can't find 'adapter_config.json' at './outputs-finetuned-wizardcoder/'
 
 # 加载的本地模型文件位于：
