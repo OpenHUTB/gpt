@@ -13,8 +13,12 @@ sys.path.append('..')
 # 执行训练：
 # --do_train  --train_file D:\work\workspace\gpt\webui\data\alpaca_data.json --valid_file D:\work\workspace\gpt\webui\data\alpaca_data.json
 
+# 不支持执行量化模型（TheBloke/WizardCoder-15B-1.0-GPTQ）的预测
+
 # 执行推断：
 # --do_predict
+# 需要模型训练的检查点文件
+# Can't find 'adapter_config.json' at './outputs-finetuned-wizardcoder/'
 
 # 加载的本地模型文件位于：
 # C:\Users\Administrator\.cache\huggingface\hub\models--WizardLM--WizardCoder-15B-V1.0\snapshots\926ca1b215c4631bc5f8c3e47173381452c23e5c

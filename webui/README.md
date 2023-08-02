@@ -193,6 +193,12 @@ python/python server.py --model WizardCoder-15B-1.0-GPTQ --trust-remote-code --c
 python/python server.py --model WizardCoder-15B-V1.0 --trust-remote-code --chat --auto-launch
 ```
 
+### 监控
+一秒钟更新显示一次显卡信息
+```shell
+nvidia-smi.exe -l 1
+```
+
 
 
 #### Basic settings
