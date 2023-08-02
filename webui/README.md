@@ -188,7 +188,7 @@ When you load this model in default or notebook modes, the "HTML" tab will show 
 python/python server.py --model WizardCoder-15B-1.0-GPTQ --trust-remote-code --chat --auto-launch --load-in-4bit
 ```
 
-加载完整版15B模型，24G显存的3090不够。
+加载完整版15B模型，24G显存的3090不够，在A6000单卡上运行成功。
 ```shell
 python/python server.py --model WizardCoder-15B-V1.0 --trust-remote-code --chat --auto-launch
 ```

@@ -9,9 +9,13 @@ import sys
 sys.path.append('..')
 from codeassist import WizardCoder
 
-# --do_train  --model_name D:\work\workspace\gpt\webui\models\WizardCoder-15B-1.0-GPTQ
+
+# --do_train  --train_file D:\work\workspace\gpt\webui\data\alpaca_data.json --valid_file D:\work\workspace\gpt\webui\data\alpaca_data.json
+
 # 加载的本地模型文件位于：
 # C:\Users\Administrator\.cache\huggingface\hub\models--WizardLM--WizardCoder-15B-V1.0\snapshots\926ca1b215c4631bc5f8c3e47173381452c23e5c
+
+# 必须指定绝对路径，否则报错：FileNotFoundError: Unable to find 'D:\work\workspace\gpt\webui\data/code_alpaca_20k_50.jsonl' at D:\work\workspace\gpt\webui
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="WizardLM/WizardCoder-15B-V1.0",
