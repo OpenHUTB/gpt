@@ -10,6 +10,8 @@ sys.path.append('..')
 from codeassist import WizardCoder
 
 # --do_train  --model_name D:\work\workspace\gpt\webui\models\WizardCoder-15B-1.0-GPTQ
+# 加载的本地模型文件位于：
+# C:\Users\Administrator\.cache\huggingface\hub\models--WizardLM--WizardCoder-15B-V1.0\snapshots\926ca1b215c4631bc5f8c3e47173381452c23e5c
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="WizardLM/WizardCoder-15B-V1.0",
