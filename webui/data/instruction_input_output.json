@@ -1,0 +1,367 @@
+[
+{
+    "instruction": "创建一个驾驶场景对象scenario，并在场景中创建了一个车辆对象v1。",
+    "input": "",
+    "output": "scenario = drivingScenario;\nv1 = vehicle(scenario,'ClassID',1','Position',[6 0 0],'Velocity',[-3 0 0],'Yaw',180)"
+},
+{
+    "instruction": "创建一个车辆对象v2，并将其添加到之前创建的驾驶场景对象scenario中。",
+    "input": "",
+    "output": "v2 = vehicle(scenario,'ClassID',1,'Position',[0 10 0],'Velocity',[0 -4 0],'Yaw',-90)"
+},
+{
+    "instruction": "将之前创建的驾驶场景对象 scenario 绘制出来，并对图形进行一些设置。",
+    "input": "",
+    "output": "plot(scenario);\nset(gcf,'Name','Scenario Plot')\nxlim([-20 20]);\nylim([-20 20]);"
+},
+{
+    "instruction": "获取场景中所有参与仿真的车辆和其对应的姿态信息。",
+    "input": "",
+    "output": "ap = actorPoses(scenario)解析上面matlab代码"
+},
+{
+    "instruction": "获取场景中指定车辆（这里是 v2）的目标位置信息。",
+    "input": "",
+    "output": "v2TargetPoses = targetPoses(v2)"
+},
+{
+    "instruction": "生成一个跟踪绘图，其中车辆 v2 被视为跟踪对象。",
+    "input": "",
+    "output": "chasePlot(v2)\nset(gcf,'Name','Chase Plot')"
+},
+{
+    "instruction": "更新车辆 v1 的航向角，并将更新后的场景图形显示在图形窗口中。",
+    "input": "",
+    "output": "v1.Yaw = 135;\nupdatePlots(scenario);"
+},
+{
+    "instruction": "创建一个驾驶场景、定义道路中心线和坡度，并将其可视化。",
+    "input": "",
+    "output": "scenario = drivingScenario;\nroadCenters = ...\n    [ 0 40 49 50 100 50 49 40 -40 -49 -50 -100 -50 -49 -40 0\n     -50 -50 -50 -50 0 50 50 50 50 50 50 0 -50 -50 -50 -50\n       0 0 .45 .45 .45 .45 .45 0 0 .45 .45 .45 .45 .45 0 0]';\nbankAngles = ...\n    [ 0 0 9 9 9 9 9 0 0 9 9 9 9 9 0 0];\n\nroad(scenario, roadCenters, bankAngles, 'lanes', lanespec(2));\nplot(scenario);"
+},
+{
+    "instruction": "从驾驶场景中提取道路边界信息并存储在 rb 变量中。",
+    "input": "",
+    "output": "rb = roadBoundaries(scenario)"
+},
+{
+    "instruction": "将驾驶场景的道路边界可视化。",
+    "input": "",
+    "output": "figure\n\nouterBoundary = rb{1};\ninnerBoundary = rb{2};\n\nplot3(innerBoundary(:,1),innerBoundary(:,2),innerBoundary(:,3),'r', ...\n      outerBoundary(:,1),outerBoundary(:,2),outerBoundary(:,3),'g')\naxis equal"
+},
+{
+    "instruction": "在驾驶场景中创建一个参与仿真的车辆（ego car）。",
+    "input": "",
+    "output": "egoCar = vehicle(scenario,'ClassID',1,'Position',[80 -40 0.45],'Yaw',30);"
+},
+{
+    "instruction": "将参与仿真的车辆（ego car）所在位置的道路边界可视化。",
+    "input": "",
+    "output": "figure\n\nrb = roadBoundaries(egoCar)\nouterBoundary = rb{1};\ninnerBoundary = rb{2};\n\nplot3(innerBoundary(:,1),innerBoundary(:,2),innerBoundary(:,3),'r', ...\n      outerBoundary(:,1),outerBoundary(:,2),outerBoundary(:,3),'g')\naxis equal"
+},
+{
+    "instruction": "在场景中创建两辆车辆并进行追踪仿真，其中一辆为参与仿真的车辆（ego car），另一辆为快速车（fast car）。",
+    "input": "",
+    "output": "chasePlot(egoCar);\nfastCar = vehicle(scenario,'ClassID',1);\n\nd = 2.7/2;\nh = .45/2;\nroadOffset = [ 0 0 0 0 d 0 0 0 0 0 0 -d 0 0 0 0\n              -d -d -d -d 0 d d d d d d 0 -d -d -d -d\n              0 0 h h h h h 0 0 h h h h h 0 0]';\n\nrWayPoints = roadCenters + roadOffset;\nlWayPoints = roadCenters - roadOffset;\n\n% loop around the track four times\nrWayPoints = [repmat(rWayPoints(1:end-1,:),5,1); rWayPoints(1,:)];\nlWayPoints = [repmat(lWayPoints(1:end-1,:),5,1); lWayPoints(1,:)];\n\nsmoothTrajectory(egoCar,rWayPoints(:,:), 30);\nsmoothTrajectory(fastCar,lWayPoints(:,:), 50);chasePlot(egoCar);\nfastCar = vehicle(scenario,'ClassID',1);\n\nd = 2.7/2;\nh = .45/2;\nroadOffset = [ 0 0 0 0 d 0 0 0 0 0 0 -d 0 0 0 0\n-d -d -d -d 0 d d d d d d 0 -d -d -d -d\n0 0 h h h h h 0 0 h h h h h 0 0]';\n\nrWayPoints = roadCenters + roadOffset;\nlWayPoints = roadCenters - roadOffset;\n\n% loop around the track four times\nrWayPoints = [repmat(rWayPoints(1:end-1,:),5,1); rWayPoints(1,:)];\nlWayPoints = [repmat(lWayPoints(1:end-1,:),5,1); lWayPoints(1,:)];\n\nsmoothTrajectory(egoCar,rWayPoints(:,:), 30);\nsmoothTrajectory(fastCar,lWayPoints(:,:), 50);chasePlot(egoCar);\nfastCar = vehicle(scenario,'ClassID',1);\n\nd = 2.7/2;\nh = .45/2;\nroadOffset = [ 0 0 0 0 d 0 0 0 0 0 0 -d 0 0 0 0\n-d -d -d -d 0 d d d d d d 0 -d -d -d -d\n0 0 h h h h h 0 0 h h h h h 0 0]';\n\nrWayPoints = roadCenters + roadOffset;\nlWayPoints = roadCenters - roadOffset;\n\n% loop around the track four times\nrWayPoints = [repmat(rWayPoints(1:end-1,:),5,1); rWayPoints(1,:)];\nlWayPoints = [repmat(lWayPoints(1:end-1,:),5,1); lWayPoints(1,:)];\n\nsmoothTrajectory(egoCar,rWayPoints(:,:), 30);\nsmoothTrajectory(fastCar,lWayPoints(:,:), 50);"
+},
+{
+    "instruction": "设置仿真场景的采样时间（Sample Time），即每次仿真的时间步长。",
+    "input": "",
+    "output": "scenario.SampleTime = 0.02"
+},
+{
+    "instruction": "给一个用于启动仿真场景，并设置仿真的停止时间的代码。",
+    "input": "",
+    "output": "scenario.StopTime = 4;\nwhile advance(scenario)\n  pause(0.001)\nend"
+},
+{
+    "instruction": "给一个代码用于关闭所有图形窗口，启动仿真场景，并记录仿真结果中所有参与仿真的车辆的位置和姿态信息。",
+    "input": "",
+    "output": "<html>\n  <head>\n    <title>My Portfolio</title>\n  </head>\n  <body>\n    <center>\n      <h1>My Portfolio</h1>\n    </center>\n  </body>\n</html>"
+},
+{
+    "instruction": "创建一个包含三个子图的图形界面，用于可视化仿真结果。",
+    "input": "",
+    "output": "close all;\nhFigure = figure;\nhFigure.Position(3) = 900;\n\nhPanel1 = uipanel(hFigure,'Units','Normalized','Position',[0 1/4 1/2 3/4],'Title','Scenario Plot');\nhPanel2 = uipanel(hFigure,'Units','Normalized','Position',[0 0 1/2 1/4],'Title','Chase Plot');\nhPanel3 = uipanel(hFigure,'Units','Normalized','Position',[1/2 0 1/2 1],'Title','Bird''s-Eye Plot');\n\nhAxes1 = axes('Parent',hPanel1);\nhAxes2 = axes('Parent',hPanel2);\nhAxes3 = axes('Parent',hPanel3);"
+},
+{
+    "instruction": "将不同的仿真结果分别显示在创建的三个子图中。",
+    "input": "",
+    "output": "% assign scenario plot to first axes and add indicators for ActorIDs 1 and 2\nplot(scenario, 'Parent', hAxes1,'ActorIndicators',[1 2]);\n\n% assign chase plot to second axes\nchasePlot(egoCar, 'Parent', hAxes2);\n\n% assign bird's-eye plot to third axes\negoCarBEP = birdsEyePlot('Parent',hAxes3,'XLimits',[-200 200],'YLimits',[-240 240]);\nfastTrackPlotter = trackPlotter(egoCarBEP,'MarkerEdgeColor','red','DisplayName','target','VelocityScaling',.5);\negoTrackPlotter = trackPlotter(egoCarBEP,'MarkerEdgeColor','blue','DisplayName','ego','VelocityScaling',.5);\negoLanePlotter = laneBoundaryPlotter(egoCarBEP);\nplotTrack(egoTrackPlotter, [0 0]);\negoOutlinePlotter = outlinePlotter(egoCarBEP);"
+},
+{
+    "instruction": "使用 while 循环不断更新仿真结果，并在鸟瞰图中显示车辆位置、车道边界和车辆轮廓等信息。",
+    "input": "",
+    "output": "restart(scenario)\nscenario.StopTime = Inf;\n\nwhile advance(scenario)\n    t = targetPoses(egoCar);\n    plotTrack(fastTrackPlotter, t.Position, t.Velocity);\n    rbs = roadBoundaries(egoCar);\n    plotLaneBoundary(egoLanePlotter, rbs);\n    [position, yaw, length, width, originOffset, color] = targetOutlines(egoCar);\n    plotOutline(egoOutlinePlotter, position, yaw, length, width, 'OriginOffset', originOffset, 'Color', color);\nend"
+},
+{
+"instruction": "打开名为AEBController的Simulink模型.",
+"input": "",
+"output": "open_system('AEBController')"
+},
+{
+    "instruction": "用代码代码绘制演员、车辆。演员和车辆分别位于位置 （0， 2） 和 （0， –2）。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n a = actor(scenario,'ClassID',1,'Length',0.24,'Width',0.45,'Height',1.7); \n passingCar = vehicle(scenario,'ClassID',1);\n a.Position = [0 2 0] \n passingCar.Position = [0 -2 0] \n plot(scenario) \n ylim([-4 4])"
+},
+{
+    "instruction": "用代码代码绘制演员、车辆。演员和车辆分别位于位置 （1， 2） 和 （2， –2）。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n a = actor(scenario,'ClassID',1,'Length',0.24,'Width',0.45,'Height',1.7); \n passingCar = vehicle(scenario,'ClassID',1);\n a.Position = [1 2 0] \n passingCar.Position = [2-2 0] \n plot(scenario) \n ylim([-4 4])"
+},
+{
+    "instruction": "用代码代码绘制演员、车辆。演员和车辆分别位于位置 （5 5） 和 （6， 6）。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n a = actor(scenario,'ClassID',1,'Length',0.24,'Width',0.45,'Height',1.7); \n passingCar = vehicle(scenario,'ClassID',1);\n a.Position = [5 5 0] \n passingCar.Position = [6 6 0] \n plot(scenario) \n ylim([-4 4])"
+},
+{
+    "instruction": "创建一条垂直于x轴的道路和一条垂直于y轴的道路。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n road(scenario,[0 -25; 0 25],'lanes',lanespec([1 1])); \n road(scenario,[-25 0; 25 0],'lanes',lanespec([1 1]));"
+},
+{
+    "instruction": "创建一条道路和两辆车，一辆车放置在固定位置，另一辆车以15的速度行驶。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n road(scenario, [0 0; 10 0; 53 -20],'lanes',lanespec(2)); \n plot(scenario,'Waypoints','on') \n idleCar = vehicle(scenario,'ClassID',1,'Position',[25 -5.5 0],'Yaw',-22); \n passingCar = vehicle(scenario,'ClassID',1) \n waypoints = [1 -1.5; 16.36 -2.5; 17.35 -2.765; 23.83 -2.01; 24.9 -2.4; 50.5 -16.7]; \n speed = 15; \n smoothTrajectory(passingCar,waypoints,speed)"
+},
+{
+    "instruction": "让该车辆生成沿着路线行驶的平滑轨迹，并在车辆沿着路线行驶时偏航-15度。",
+    "input": "",
+    "output": "waypoints = [1 -1.5; 16.6 -2.1; 23.7 -0.9; 52.2 -17.6]; \n yaw =  [0; 0; -15; NaN]; \n smoothTrajectory(passingCar,waypoints,speed,'Yaw',yaw)"
+},
+{
+    "instruction": "，创建一条垂直于x轴的道路和一条垂直于y轴的道路，以及一个车辆对象,的速度和行驶轨迹偏航行驶。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n road(scenario,[0 -25; 0 25],'lanes',lanespec([1 1])); \n road(scenario,[-25 0; 25 0],'lanes',lanespec([1 1])); \n turningCar = vehicle(scenario,'ClassID',1); \n waypoints = [-20 -2; -5 -2; 2 5; 2 20]; \n speed = [6 5 5 6]; \n yaw = [0 0 90 90]; \n smoothTrajectory(turningCar,waypoints,speed,'Yaw',yaw) \n plot(scenario,'Waypoints','on')"
+},
+{
+    "instruction": "让所有车辆行驶一个时间步长，并停止0.01秒，不断循环该过程直至所有车辆到达目的地。",
+    "input": "",
+    "output": "while advance(scenario) \n    pause(0.01) \n end"
+},
+{
+    "instruction": "让z轴的范围变为为0到4，图形的视角水平旋转角度-60度，垂直旋转角度30度。",
+    "input": "",
+    "output": "zlim([0 4]) \n view(-60,30)"
+},
+{
+    "instruction": "打开名为AEBTestBench的Simulink模型，并展开模型中的Sensors and Environment.",
+    "input": "", 	
+    "output": "open_system('AEBTestBench/Sensors and Environment')"
+},
+{
+    "instruction": "创建一条长50米，宽6米的直路。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n roadCenters = [0 0; 50 0]; \n roadWidth = 6; \n road(scenario, roadCenters, roadWidth); \n plot(scenario,'RoadCenters','on','Centerline','on');"
+},
+{
+    "instruction": "创建一条道路，并为它分车道。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n roadCenters = [0 0; 50 0]; \n road(scenario, roadCenters, 'lanes', lanespec([1 2])); \n plot(scenario,'RoadCenters','on');"
+},
+{
+    "instruction": "在现有的一条道路上添加一条，形成交叉路口。",
+    "input": "",
+    "output": "roadCenters = [25 -25; 25  25]; \n road(scenario, roadCenters, 'lanes', lanespec([1 1]));"
+},
+{
+    "instruction": "创建一条长30米，宽3米的直路。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n roadCenters = [0 0; 30 0]; \n roadWidth = 3; \n road(scenario, roadCenters, roadWidth); \n plot(scenario,'RoadCenters','on','Centerline','on');"
+},
+{
+    "instruction": "创建一条长40米，宽5米的直路。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n roadCenters = [0 0; 40 0]; \n roadWidth = 5; \n road(scenario, roadCenters, roadWidth); \n plot(scenario,'RoadCenters','on','Centerline','on');"
+},
+{
+    "instruction": "创建一条长60米，宽5米的直路。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n roadCenters = [0 0; 60 0]; \n roadWidth = 5; \n road(scenario, roadCenters, roadWidth); \n plot(scenario,'RoadCenters','on','Centerline','on');"
+},
+{
+    "instruction": "创建一条曲路，使其经过（0，0）（10，0）（53，-20）三点",
+    "input": "",
+    "output": "scenario = drivingScenario; \n roadCenters = [0 0; 10 0; 53 -20]; \n roadWidth = 6; \n road(scenario, roadCenters, roadWidth,'lanes',lanespec(2)); \n\nplot(scenario,'RoadCenters','on');"
+},
+{
+    "instruction": "创建一条曲路，使其经过（0，0）（10，3）（20，6）三点",
+    "input": "",
+    "output": "scenario = drivingScenario; \n roadCenters = [0 0; 10 3; 20 6]; \n roadWidth = 6; \n road(scenario, roadCenters, roadWidth,'lanes',lanespec(2)); \n\nplot(scenario,'RoadCenters','on');"
+},
+{
+    "instruction": "创建一条有一定坡度的路",
+    "input": "",
+    "output": "scenario = drivingScenario; \n roadCenters = [ 0 0 0 \n               25 0 3 \n               50 0 0]; \n road(scenario, roadCenters, 'lanes', lanespec(2)); \n plot(scenario,'RoadCenters','on'); \n view(30,24);"
+},
+{
+    "instruction": "在一条主路上创建一条支路。",
+    "input": "",
+    "output": "scenario = drivingScenario; \n ls = lanespec(2); \n laneWidth = ls.Width(1); \n % add straight road segment \n road(scenario, [0 0 0; 50 0 0], 'lanes', lanespec(2)); \n % define waypoints of lane exit \n roadCenters =  [3.0 -laneWidth/2 \n                3.1 -laneWidth/2 \n               15.0 -laneWidth \n               45.0 -20]; \n % add the exit lane \n road(scenario, roadCenters, laneWidth); \n plot(scenario,'RoadCenters','on')"
+},
+{
+"instruction": "定义一个名为scenario的变量，并将其赋值为LeftTurnScenarioNoSensorsModified(20)，其中20是以米/秒为单位的常数值.",
+"input": "",
+"output": "scenario = LeftTurnScenarioNoSensorsModified(20) % m/s"
+},
+{
+    "instruction": "打开了一个名为LeftTurnScenarioNoSensors.m的文件.",
+    "input": "",
+    "output": "open LeftTurnScenarioNoSensors.m"
+},
+{
+    "instruction": "打开了一个名为LeftTurnScenarioNoSensorsModified.m的文件.",
+    "input": "",
+    "output": "open LeftTurnScenarioNoSensorsModified.m"
+},
+{
+    "instruction": "打开名为scenarioFileName的驾驶场景文件，并在Driving Scenario Designer应用程序中加载该场景.",
+    "input": "",
+    "output": "drivingScenarioDesigner(scenarioFileName)"
+},
+{
+    "instruction": "打开一个名为scenario的驾驶场景，并在Driving Scenario Designer应用程序中加载该场景.",
+    "input": "",
+    "output": "drivingScenarioDesigner(scenario)"
+},
+{
+    "instruction": "打开一个名为scenario的驾驶场景，并在Driving Scenario Designer应用程序中加载该场景,，并且打开一个名为sensors的传感器配置窗口.",
+    "input": "",
+    "output": "drivingScenarioDesigner(scenario,sensors)"
+},
+{
+    "instruction": "打开Driving Scenario Designer应用程序，并显示一个空白场景.",
+    "input": "",
+    "output": "drivingScenarioDesigner"
+},
+{
+    "instruction": "打开名为AEBTestBenchExample的Simulink模型.",
+    "input": "",
+    "output": "open_system('AEBTestBenchExample')"
+},
+{
+    "instruction": "打开名为AEBTestBenchExample的Simulink模型，并展开模型中的Vehicle and Environment子系统，然后展开Actors and Sensor Simulation子系统.",
+    "input": "",
+    "output": "open_system('AEBTestBenchExample/Vehicle and Environment/Actors and Sensor Simulation')"
+},
+{
+    "instruction": "向MATLAB搜索路径中添加了一个路径，该路径指向drivingdemos工具箱中的演示程序。然后，它调用了一个名为helperDrivingProjectSetup的函数，并将'AutonomousEmergencyBraking.zip'作为第一个参数传递给它，将当前工作目录pwd作为第二个参数传递给它.",
+    "input": "",
+    "output": "addpath(fullfile(matlabroot,'toolbox',',driving',',drivingdemos',))  \n  helperDrivingProjectSetup(',AutonomousEmergencyBraking.zip',workDir=pwd)"
+},
+{
+    "instruction": "禁止模型预测控制(Model Predictive Control, MPC)的详细信息消息输出，以减少在MATLAB命令窗口中显示的信息量.",
+    "input": "",
+    "output": "mpcverbosity('off',)"
+},
+{
+    "instruction": "打开名为AEBTestBench的Simulink模型.",
+    "input": "",
+    "output": "open_system('AEBTestBench',)"
+},
+{
+    "instruction": "打开名为AEBTestBench的Simulink模型，并展开模型中的Sensors and Environment.",
+    "input": "",
+    "output": "open_system('AEBTestBench/Sensors and Environment',)"
+},
+{
+    "instruction": "打开名为AEBSensorFusion的Simulink模型.",
+    "input": "",
+    "output": "open_system('AEBSensorFusion',)"
+},
+{
+    "instruction": "打开名为AEBDecisionLogic的Simulink模型.",
+    "input": "",
+    "output": "open_system('AEBDecisionLogic',)"
+},
+{
+    "instruction": "打开名为AEBController的Simulink模型.",
+    "input": "",
+    "output": "open_system('AEBController',)"
+},
+{
+    "instruction": "打开名为AEBController的Simulink模型，然后展开模型中的NLMPC Controller子系统.",
+    "input": "",
+    "output": "open_system('AEBController/NLMPC Controller',)"
+},
+{
+    "instruction": "打开名为AEBController的Simulink模型，然后展开模型中的Braking Controller.",
+    "input": "",
+    "output": "open_system('AEBController/Braking Controller',)"
+},
+{
+    "instruction": "打开名为AEBTestBench的Simulink模型，并展开模型中的Metrics Assessment子系统.",
+    "input": "",
+    "output": "open_system('AEBTestBench/Metrics Assessment',)"
+},
+{
+    "instruction": "使用sim函数对名为AEBTestBench的Simulink模型进行仿真，仿真时间截止到0.1秒.",
+    "input": "",
+    "output": "sim('AEBTestBench',StopTime=',0.1',); % Simulate for 0.1 seconds"
+},
+{
+    "instruction": "使用sim函数对名为AEBTestBench的Simulink模型进行仿真，仿真时间截止到2.8秒.",
+    "input": "",
+    "output": "sim('AEBTestBench',StopTime=',2.8',); % Simulate for 2.8 seconds"
+},
+{
+    "instruction": "使用sim函数对名为AEBTestBench的Simulink模型进行仿真，直到仿真场景结束，然后调用名为helperPlotAEBResults的函数，并将仿真输出结果logsout和场景函数名称scenarioFcnName作为参数传递给它",
+    "input": "",
+    "output": "sim('AEBTestBench',); % Simulate to end of scenario  \n  helperPlotAEBResults(logsout,scenarioFcnName)"
+},
+{
+    "instruction": "调用名为helperSLAEBSetup的函数，并将场景函数名称scenario_25_AEB_PedestrianTurning_Nearside_10kph作为参数传递给它.",
+    "input": "",
+    "output": "helperSLAEBSetup(scenarioFcnName='scenario_25_AEB_PedestrianTurning_Nearside_10kph',)"
+},
+{
+    "instruction": "调用名为helperSLAEBSetup的函数，并将场景函数名称scenario_01_AEB_Bicyclist_Longitudinal_25width作为参数传递给它.",
+    "input": "",
+    "output": "helperSLAEBSetup(scenarioFcnName='scenario_01_AEB_Bicyclist_Longitudinal_25width',)"
+},
+{
+    "instruction": "使用 mpcverbosity 函数来设置非线性模型预测控制(NMPC)对象的详细程度输出.",
+    "input": "",
+    "output": "mpcverbosity('on',)"
+},
+{
+    "instruction": "调用名为 helperSLAEBWithVehicleVariantsSetup 的函数，并将场景函数名称 scenario_01_AEB_Pedestrian_Intersection 和车辆变体名称 3DOF 作为参数传递给它，接下来，代码使用 pause(3) 函数来暂停程序执行，等待3秒钟，以确保模型有足够的时间加载车辆变体模块。最后，代码使用 open_system 函数打开名为 AEBWithVehicleVariantsTestBench/Vehicle Dynamics/Vehicle Dynamics 3DOF 的 Simulink 模型",
+    "input": "",
+    "output": "helperSLAEBWithVehicleVariantsSetup(...  \n  scenarioFcnName='scenario_01_AEB_Pedestrian_Intersection', ...  \n  vehicleVariantName=',3DOF',);  \n  pause(3)  \n  open_system( ...  \n  ',AEBWithVehicleVariantsTestBench/Vehicle Dynamics/Vehicle Dynamics 3DOF',)"
+},
+{
+    "instruction": "使用 open_system 函数来打开名为 VehDyn14DOF/Passenger Vehicle 的 Simulink 模型中的子系统.",
+    "input": "",
+    "output": "open_system('VehDyn14DOF/Passenger Vehicle',)"
+},
+{
+    "instruction": "使用 helperPlotScenario 函数来创建一个名为 hFigScenario 的图形窗口，并在其中绘制名为 scenario_01_AEB_Pedestrian_Intersection 的场景图.",
+    "input": "",
+    "output": "hFigScenario = helperPlotScenario('scenario_01_AEB_Pedestrian_Intersection',)"
+},
+{
+    "instruction": "使用 close 函数关闭名为 hFigScenario 的图形窗口.",
+    "input": "",
+    "output": "close(hFigScenario)"
+},
+{
+    "instruction": "调用名为 helperSLAEBWithVehicleVariantsSetup 的函数，并将场景函数名称 scenario_01_AEB_Pedestrian_Intersection 和车辆变体名称 3DOF 作为参数传递给它.",
+    "input": "",
+    "output": "helperSLAEBWithVehicleVariantsSetup(...  \n  scenarioFcnName='scenario_01_AEB_Pedestrian_Intersection', ...  \n  vehicleVariantName=',3DOF',)"
+},
+{
+    "instruction": "使用 sim 函数来运行名为 AEBWithVehicleVariantsTestBench 的 Simulink 模型，并通过 logsout 参数来记录仿真数据，运行模型后，代码使用 helperPlotAEBResults 函数来绘制仿真结果，并将 logsout 和场景函数名称作为参数传递给它.",
+    "input": "",
+    "output": "sim('AEBWithVehicleVariantsTestBench',);  \n  helperPlotAEBResults(logsout,scenarioFcnName)"
+},
+{
+    "instruction": "使用 sim 函数来运行名为 AEBWithVehicleVariantsTestBench 的 Simulink 模型，并通过 logsout 参数来记录仿真数据，运行模型后，代码使用 helperPlot14DOFVehicleResults 函数来绘制仿真结果，并将 logsout 和场景函数名称作为参数传递给它",
+    "input": "",
+    "output": "sim('AEBWithVehicleVariantsTestBench',);  \n  [hFigLongResults,hFigLatResults] = helperPlot14DOFVehicleResults(logsout,scenarioFcnName)"
+},
+{
+    "instruction": "使用 ispc 函数判断当前系统是否为 Microsoft Windows。如果当前系统不是 Windows，则会抛出一个错误，提示用户当前系统不支持进行3D仿真",
+    "input": "",
+    "output": "if ~ispc  \n  error(['3D Simulation is supported only on Microsoft', char(174), ...  \n  ' Windows', char(174), '.'])  \n  end"
+}
+]
