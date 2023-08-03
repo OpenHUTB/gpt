@@ -1,4 +1,43 @@
-# Text generation web UI
+# 文本生成
+
+## 程序运行
+
+### 大模型的训练和测试
+训练和微调：
+```shell
+python/python --do_train  --train_file D:\work\workspace\gpt\webui\data\alpaca_data.json --valid_file D:\work\workspace\gpt\webui\data\alpaca_data.json
+```
+
+预测：
+```shell
+python/python --do_predict --prompt  创建一个驾驶场景对象scenario，并在场景中创建了一个车辆对象v1。
+```
+
+
+### 代码生成的网页端启动
+
+双击`wizardcoder-启动.bat`，会弹出浏览器并打开地址`http://127.0.0.1:7860/` ，在对话框中进行问答。
+比如在输入框中输入`使用matlab写一个冒泡排序算法`，然后回车（或点击`Generate`），将会生成Matlab语言的冒泡排序代码和测试用例。
+
+
+### 网页端程序调试
+初始调试命令（3090显卡测试通过）
+```shell
+python/python server.py --model WizardCoder-15B-1.0-GPTQ --trust-remote-code --chat --auto-launch --load-in-4bit
+```
+
+加载完整版15B模型，24G显存的3090不够，在A6000单卡上运行成功。
+```shell
+python/python server.py --model WizardCoder-15B-V1.0 --trust-remote-code --chat --auto-launch
+```
+
+### 监控
+一秒钟更新显示一次显卡信息
+```shell
+nvidia-smi.exe -l 1
+```
+
+
 
 A gradio web UI for running Large Language Models like LLaMA, llama.cpp, GPT-J, Pythia, OPT, and GALACTICA.
 
@@ -173,31 +212,6 @@ python download-model.py EleutherAI/gpt-j-6B --text-only
 
 When you load this model in default or notebook modes, the "HTML" tab will show the generated text in 4chan format.
 </details>
-
-## 程序运行
-
-### 代码生成的网页端启动
-
-双击`wizardcoder-启动.bat`，会弹出浏览器并打开地址`http://127.0.0.1:7860/` ，在对话框中进行问答。
-比如在输入框中输入`使用matlab写一个冒泡排序算法`，然后回车（或点击`Generate`），将会生成Matlab语言的冒泡排序代码和测试用例。
-
-
-### 调试
-初始调试命令（3090显卡测试通过）
-```shell
-python/python server.py --model WizardCoder-15B-1.0-GPTQ --trust-remote-code --chat --auto-launch --load-in-4bit
-```
-
-加载完整版15B模型，24G显存的3090不够，在A6000单卡上运行成功。
-```shell
-python/python server.py --model WizardCoder-15B-V1.0 --trust-remote-code --chat --auto-launch
-```
-
-### 监控
-一秒钟更新显示一次显卡信息
-```shell
-nvidia-smi.exe -l 1
-```
 
 
 
