@@ -14,8 +14,8 @@
 ## [代码生成](https://github.com/OpenHUTB/gpt/tree/main/webui) 
 
 1. 运行[大模型代码生成](https://github.com/OpenHUTB/gpt/blob/main/webui/training_wizardcoder_mydata.py) ，并根据语音识别模块生成`matlab`代码；
-2. 使用matlab软件自带代码和github上的成熟matlab仓库进行模型微调（可选）。
-3. 根据matlab代码生成对应的交通场景，并在 [编辑器](https://marketplace.visualstudio.com/items?itemName=MathWorks.language-matlab) 中进行集成。
+2. 根据matlab代码生成对应的交通场景，并在 [编辑器](https://marketplace.visualstudio.com/items?itemName=MathWorks.language-matlab) 中进行集成。
+3. 使用matlab软件自带代码和github上的成熟matlab仓库进行模型微调（可选）。
 
 
 ## [场景交互](https://github.com/OpenHUTB/gpt/tree/main/sim) 
