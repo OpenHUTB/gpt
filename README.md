@@ -3,15 +3,21 @@
 该工程实现语音控制交通场景的编辑和控制。
 
 # 流程
+技术路线包括以下三个步骤：
 
-## 代码生成
+## [语音识别](https://github.com/OpenHUTB/gpt/tree/main/recognition) 
 
-1. 运行大模型matlab代码生成，并测试生成代码的效果；
-2. 基于[lora](https://github.com/microsoft/LoRA) 使用matlab软件自带代码和github上的成熟matlab仓库进行模型微调。
+将中文语音对话转换成文本，供 [代码生成模块](https://github.com/OpenHUTB/gpt/tree/main/webui) 使用，参考[使用深度学习训练语音命令识别模型](https://ww2.mathworks.cn/help/releases/R2022b/audio/ug/train-speech-command-recognition-model-using-deep-learning.html) 。
+
+
+## [代码生成](https://github.com/OpenHUTB/gpt/tree/main/webui) 
+
+1. 运行[大模型代码生成](https://github.com/OpenHUTB/gpt/blob/main/webui/training_wizardcoder_mydata.py) ，并根据语音识别模块生成`matlab`代码；
+2. 使用matlab软件自带代码和github上的成熟matlab仓库进行模型微调（可选）。
 3. 根据matlab代码生成对应的交通场景，并在 [编辑器](https://marketplace.visualstudio.com/items?itemName=MathWorks.language-matlab) 中进行集成。
 
 
-## 场景编辑和控制
+## [场景编辑和控制](https://github.com/OpenHUTB/gpt/tree/main/sim) 
 
 拟实现的功能包括（使用自动驾驶场景设计器）：
 1. 增加、删除场景中的车辆、行人等交通参与者，修改交通参与者的属性，查询场景中有多少车（增删改查）；
@@ -23,9 +29,7 @@
 7. [以编程方式创建驾驶场景](https://ww2.mathworks.cn/help/driving/ug/create-driving-scenario-programmatically.html) ；
 8. [生成三维模型](https://github.com/uezo/ChatdollKit) ；
 
-## 语音识别（可选）
 
-识别中文语句或者输入的中文句子，参考[使用深度学习训练语音命令识别模型](https://ww2.mathworks.cn/help/releases/R2022b/audio/ug/train-speech-command-recognition-model-using-deep-learning.html) 。
 
 
 
