@@ -1,8 +1,9 @@
-# 交通场景交互式编辑和控制
+# 交通大模型
 
-该工程实现语音控制交通场景的编辑和控制。
+该工程实现人类语音进行交通场景的编辑和控制。
 
 # 流程
+
 技术路线包括以下三个步骤：
 
 ## [语音识别](https://github.com/OpenHUTB/gpt/tree/main/recognition) 
@@ -17,9 +18,9 @@
 3. 根据matlab代码生成对应的交通场景，并在 [编辑器](https://marketplace.visualstudio.com/items?itemName=MathWorks.language-matlab) 中进行集成。
 
 
-## [场景编辑和控制](https://github.com/OpenHUTB/gpt/tree/main/sim) 
+## [场景交互](https://github.com/OpenHUTB/gpt/tree/main/sim) 
 
-拟实现的功能包括（使用自动驾驶场景设计器）：
+拟实现的编辑和控制功能包括（使用自动驾驶场景设计器）：
 1. 增加、删除场景中的车辆、行人等交通参与者，修改交通参与者的属性，查询场景中有多少车（增删改查）；
 2. 将摄像机、激光雷达等传感器放置到某台车上；
 3. 场景中车辆加速减速；
