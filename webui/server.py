@@ -4,9 +4,10 @@ import warnings
 from modules.logging_colors import logger
 from modules.block_requests import RequestBlocker
 
-os.environ['GRADIO_ANALYTICS_ENABLED'] = 'False'
-os.environ['BITSANDBYTES_NOWELCOME'] = '1'
-warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
+#os.enviorn是一个字典，包含当前进程的环境变量（一些全局配置参数，在程序运行时通过代码访问或设置）
+os.environ['GRADIO_ANALYTICS_ENABLED'] = 'False' #自定义环境变量'GRADIO_ANALYTICS_ENABLED'  '启用梯度分析'
+os.environ['BITSANDBYTES_NOWELCOME'] = '1'#自定义环境变脸
+warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')#设置警告过滤器
 
 with RequestBlocker():
     import gradio as gr
@@ -50,7 +51,7 @@ from modules.text_generation import (
     stop_everything_event
 )
 
-
+#定义模型加载封装函数，selected_model表示要加载的模型，loader一个加载模型的函数或者类，负责根据selected_model的信息加载对应的模型，autoload布尔值，用于指示是否在函数调用时自动加载模#型
 def load_model_wrapper(selected_model, loader, autoload=False):
     if not autoload:
         yield f"The settings for {selected_model} have been updated.\nClick on \"Load the model\" to load it."
@@ -61,51 +62,53 @@ def load_model_wrapper(selected_model, loader, autoload=False):
     else:
         try:
             yield f"Loading {selected_model}..."
-            shared.model_name = selected_model
-            unload_model()
+            shared.model_name = selected_model#model_name为全局变量，shared一个可在整个程序#中共享的命名空间
+            unload_model()#确保卸载之前的模型，加载新模型
             if selected_model != '':
-                shared.model, shared.tokenizer = load_model(shared.model_name, loader)
+                shared.model, shared.tokenizer = load_model(shared.model_name, loader)#把模型对象#和分词器对象分别赋值
 
             if shared.model is not None:
                 yield f"Successfully loaded {selected_model}"
             else:
                 yield f"Failed to load {selected_model}."
+#捕获异常，记录错误消息
         except:
             exc = traceback.format_exc()
             logger.error('Failed to load the model.')
             print(exc)
             yield exc
 
-
+#定义加载lora的函数
 def load_lora_wrapper(selected_loras):
-    yield ("Applying the following LoRAs to {}:\n\n{}".format(shared.model_name, '\n'.join(selected_loras)))
-    add_lora_to_model(selected_loras)
+    yield ("Applying the following LoRAs to {}:\n\n{}".format(shared.model_name, '\n'.join(selected_loras)))#将selected_loras列表中的每个LoRA连接成一个字符串，每个LoRA之间用换行符分隔
+    add_lora_to_model(selected_loras)#调用add_lora_to_model函数，将selected_loras中的LoRAs应用到模型中
     yield ("Successfuly applied the LoRAs")
 
-
+#定义加载提示文件的函数，fname为文件名称
 def load_prompt(fname):
     if fname in ['None', '']:
         return ''
-    elif fname.startswith('Instruct-'):
-        fname = re.sub('^Instruct-', '', fname)
-        file_path = Path(f'characters/instruction-following/{fname}.yaml')
-        if not file_path.exists():
+    elif fname.startswith('Instruct-'):#文件名是否以Instruct-开头
+        fname = re.sub('^Instruct-', '', fname)#则删除Instruct- 以空字符串''替代
+        file_path = Path(f'characters/instruction-following/{fname}.yaml')#构造处理后的文件路径
+        if not file_path.exists():#检查文件是否存在
             return ''
 
         with open(file_path, 'r', encoding='utf-8') as f:
-            data = yaml.safe_load(f)
-            output = ''
-            if 'context' in data:
+            data = yaml.safe_load(f)#yaml.safe_load函数将解析文件内容并返回相应的Python数据结构
+            output = ''#初始化一个空字符串output，用于存储从提示文件中加载的内容
+            if 'context' in data:#检查data字典中是否存在键'context'
                 output += data['context']
-
+#替换规则
             replacements = {
                 '<|user|>': data['user'],
                 '<|bot|>': data['bot'],
                 '<|user-message|>': 'Input',
             }
 
+#将data['turn_template']字符串中的'<|bot-message|>'之前的部分进行字符串替换，然后将替换后的结果追加到output中
             output += utils.replace_all(data['turn_template'].split('<|bot-message|>')[0], replacements)
-            return output.rstrip(' ')
+            return output.rstrip(' ')#去除output的尾部空字符
     else:
         file_path = Path(f'prompts/{fname}.txt')
         if not file_path.exists():
@@ -114,41 +117,47 @@ def load_prompt(fname):
         with open(file_path, 'r', encoding='utf-8') as f:
             text = f.read()
             if text[-1] == '\n':
-                text = text[:-1]
+                text = text[:-1]#去掉最后的换行符
 
             return text
 
-
+#计算token的数量
 def count_tokens(text):
     try:
         tokens = get_encoded_length(text)
         return f'{tokens} tokens in the input.'
-    except:
+    except:#如果tokenizer没有正确加载，提示错误
         return 'Couldn\'t count the number of tokens. Is a tokenizer loaded?'
 
-
+#下载模型，repo_id-仓库id，gr.Progress()是gradio库中用于显示下载进度的一个特殊对象
 def download_model_wrapper(repo_id, progress=gr.Progress()):
     try:
-        downloader_module = importlib.import_module("download-model")
-        downloader = downloader_module.ModelDownloader()
-        repo_id_parts = repo_id.split(":")
+        downloader_module = importlib.import_module("download-model")#动态导入指定模块
+        downloader = downloader_module.ModelDownloader()#实例化对象赋给downloader变量
+        repo_id_parts = repo_id.split(":")#以":"为分隔符，分割repo_id，以列表形式返回
         model = repo_id_parts[0] if len(repo_id_parts) > 0 else repo_id
         branch = repo_id_parts[1] if len(repo_id_parts) > 1 else "main"
         check = False
 
-        progress(0.0)
+        progress(0.0)#更新加载进度
         yield ("Cleaning up the model/branch names")
+#sanitize_model_and_branch_names是ModelDownloader类中的一个方法，用于清理和处理模型名称#和分支名称。
         model, branch = downloader.sanitize_model_and_branch_names(model, branch)
 
         yield ("Getting the download links from Hugging Face")
+#downloader对象的get_download_links_from_huggingface方法来获取模型下载链接、SHA-256哈希值和LoRA信息（如果有的话）
+#links: 一个包含下载链接的列表，可能包含多个下载链接，用于不同类型的模型文件或数据。
+#sha256: 一个SHA-256哈希值，用于校验下载文件的完整性。
+#is_lora: 一个布尔值，表示是否为LoRA模型。
         links, sha256, is_lora = downloader.get_download_links_from_huggingface(model, branch, text_only=False)
 
         yield ("Getting the output folder")
-        output_folder = downloader.get_output_folder(model, branch, is_lora)
+        output_folder = downloader.get_output_folder(model, branch, is_lora)#成的模型下载文件的输出文件夹路径。
 
         if check:
             progress(0.5)
             yield ("Checking previously downloaded files")
+#downloader对象的check_model_files方法，该方法用于检查之前下载的模型文件是否完整和正确
             downloader.check_model_files(model, branch, links, sha256, output_folder)
             progress(1.0)
         else:
