@@ -1,0 +1,15 @@
+% 生成一段600m三车道的路和四辆车，车分别在一二三四车道上
+scenario = drivingScenario;
+roadCenters = [0 0; 600 0];
+road(scenario, roadCenters, 'Lanes', lanespec(4));
+
+v1 = vehicle(scenario, 'ClassID', 1);
+v2 = vehicle(scenario, 'ClassID', 1);
+v3 = vehicle(scenario, 'ClassID', 1);
+v4 = vehicle(scenario, 'ClassID', 1);
+
+% 调整第二辆车的初始位置
+v1.Position = [1 4 0];
+v2.Position = [0 4 0]; % 放置在第一条车道上
+v3.Position = [0 -4 0]; % 放置在第三条车道上
+v4.Position = [0 10 0]; % 放置在第四条车道上
