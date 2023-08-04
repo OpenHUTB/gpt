@@ -1,6 +1,6 @@
 import os
 import warnings
-
+  
 from modules.logging_colors import logger
 from modules.block_requests import RequestBlocker
 
