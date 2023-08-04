@@ -2,10 +2,19 @@
 
 % 需要递归的方式克隆整个项目 git clone <repository> --recursive
 % 更新子模块 git submodule update 
-addpath(fullfile(fileparts(pwd), 'utils', 'json'));
+addpath(genpath(fullfile(fileparts(pwd), 'utils')));
 
-m_path = 'data\test.m';
+m_files = RangTraversal('data');
 
-s = m2json(m_path);
+% instruction_list;
+instruction_list = {};
+for i = 1 : numel(m_files)
+    cur_m_file = m_files{i};
 
-out_str = jsonencode(s, PrettyPrint=true)
+    instruction_list = [instruction_list, m2json(cur_m_file)] ;
+
+end
+
+out_str = jsonencode(instruction_list, PrettyPrint=true);
+writelines(out_str, fullfile(fileparts(pwd), 'webui', 'data', 'scenario_generation.json'));
+
