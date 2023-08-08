@@ -1,3 +1,23 @@
+%% 调用虚幻引擎
+% % 参考：toolbox\shared\drivingscenario\+driving\+scenario\+internal\GamingEngineScenarioAnimator.m
+% World = sim3d.World(sim3d.engine.Env.AutomotiveExe(), "/Game/Maps/EmptyGrass4k4k"); % EmptyGrass4k4k or BlackLake
+% World.start();  % 打开虚幻引擎（黑色）界面
+
+% matlab\toolbox\shared\sim3d\sim3d\+sim3d\+engine -> AutomotiveExe()
+% 原来的path路径是：matlab\toolbox\shared\sim3d_projects\automotive_project
+% 自定义的是：D:\project\EmptyGrass4k4k\WindowsNoEditor
+getpref('Simulation3D', 'UnrealPath')
+
+% 该变量指向导出的可执行场景所在的路径
+% exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
+exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe";
+
+% ExecutablePath' 的值必须满足函数: @(x)isstring(x)||isempty(x)
+setpref('Simulation3D', 'UnrealPath', exe_path)
+
+% rmpref('Simulation3D', 'UnrealPath')
+
+
 %% 通过文本获得代码
 % 获得python可执行文件的路径
 % proj_dir = fileparts(fileparts(mfilename("fullpath")));
@@ -39,8 +59,8 @@ trajectory(egoVehicle, waypoints, speed);
 
 
 % 解决"现在无法访问以前可访问的文件 Designer.p"的问题
-addpath(fullfile(matlabroot, 'toolbox\shared\drivingscenario'));
-rehash toolboxcache
+% addpath(fullfile(matlabroot, 'toolbox\shared\drivingscenario'));
+% rehash toolboxcache
 
 % 构建驾驶场景设计器类
 designer = driving.internal.scenarioApp.Designer(scenario);
@@ -61,10 +81,7 @@ designer.Simulator.run()
 
 
 
-%% 调用虚幻引擎
-% % 参考：toolbox\shared\drivingscenario\+driving\+scenario\+internal\GamingEngineScenarioAnimator.m
-% World = sim3d.World(sim3d.engine.Env.AutomotiveExe(), "/Game/Maps/EmptyGrass4k4k"); % EmptyGrass4k4k or BlackLake
-% World.start();  % 打开虚幻引擎（黑色）界面
+
 
 
 
