@@ -1,12 +1,12 @@
 %% 通过文本获得代码
 % 获得python可执行文件的路径
-proj_dir = fileparts(fileparts(mfilename("fullpath")));
-py_path = fullfile(proj_dir, ...
-    'webui', 'python', 'python.exe');
-py_script_path = fullfile(proj_dir, 'webui', 'training_wizardcoder_mydata.py');
-cmd_prefix = [py_path, ' ' py_script_path];
-
-system([cmd_prefix]);
+% proj_dir = fileparts(fileparts(mfilename("fullpath")));
+% py_path = fullfile(proj_dir, ...
+%     'webui', 'python', 'python.exe');
+% py_script_path = fullfile(proj_dir, 'webui', 'training_wizardcoder_mydata.py');
+% cmd_prefix = [py_path, ' ' py_script_path];
+% 
+% system([cmd_prefix]);
 
 
 %% 通过代码获得场景
@@ -50,19 +50,13 @@ designer = driving.internal.scenarioApp.Designer(scenario);
 
 % 启动虚幻引擎场景查看器
 ue_viewer = designer.getGamingEngineViewer(1, 1);
-ue_viewer.start();  % 开始仿真（失败）
+% ue_viewer.start();  % 开始仿真（失败）
+
+% 开始仿真（相当于点击驾驶场景设计器菜单中的运行）
+designer.Simulator.run()
 
 
-%%
-plot(scenario)
-% % 该循环只能运行一次，否则出现错误：
-% The simulation is not running.  Call restart to start over.
-while advance(scenario)
-    pause(0.01)
-end
-
-% ue_viewer.delete()  % 关闭仿真（成功）
-
+% ue_viewer.delete()  % 关闭虚幻引擎场景查看器（成功）
 
 
 
