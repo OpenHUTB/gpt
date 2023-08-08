@@ -9,6 +9,10 @@ drivingScenarioDesigner(scenario)
 3. 打开虚幻引擎
 4. 启动仿真
 
+## 虚幻引擎转发配置
+参考[链接](https://docs.unrealengine.com/4.26/zh-CN/SharingAndReleasing/PixelStreaming/PixelStreamingIntro/) 进行虚幻引擎像素流插件的配置，碰到`
+Streamer disconnected`或者`浏览器访问时的Crash`问题请参考[链接](https://blog.csdn.net/m0_55173487/article/details/126231595) ，相应改动代码位于`WindowsNoEditor\Engine\Source\Programs\PixelStreaming\WebServers\SignallingWebServer`目录下。
+
 ## 驾驶场景设计器分析
 
 
