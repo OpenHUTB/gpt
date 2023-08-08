@@ -10,11 +10,11 @@
 
 
 %% 通过代码获得场景
-scenario = drivingScenario
-v1 = vehicle(scenario, position=[-23.603712367621732 -7.3159775241949647 1.99])
+% scenario = drivingScenario
+% v1 = vehicle(scenario, position=[-23.603712367621732 -7.3159775241949647 1.99])
 
 
-%% 测试用例
+%% 通过代码获得场景的测试用例
 scenario = drivingScenario;
 roadCenters = [0 0; 30 0];
 road(scenario, roadCenters, 'Lanes',lanespec(2));
