@@ -1,5 +1,12 @@
 # 驾驶场景显示
 
+## 运行
+1. 启动虚幻引擎可执行文件中的脚本
+2. 运行以下命令，参数使用本地虚幻引擎的可执行文件代替：
+```
+main('C:\Buffer\gpt\WindowsNoEditor\AutoVrtlEnv.exe')
+```
+
 ## 流程
 1. 获得生成的matlab代码
 2. 使用驾驶场景设计器打开场景变量
@@ -8,6 +15,7 @@ drivingScenarioDesigner(scenario)
 ```
 3. 打开虚幻引擎
 4. 启动仿真
+
 
 ## 仿真软件
 配置[自定义仿真软件](https://github.com/OpenHUTB/matlab) 。
