@@ -1,9 +1,15 @@
-function main(exe_path)
-% 该变量指向导出的可执行场景所在的路径
+function main(exe_dir)
+% 参数exe_path指向导出的可执行场景所在的路径
+% 运行示例：main('D:\project\EmptyGrass4k4k\WindowsNoEditor')
 % exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
-% exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe";
 
 % TODO：启动虚幻引擎信令服务
+exe_path = fullfile(exe_dir, 'AutoVrtlEnv.exe');
+signalling_server_path = fullfile(exe_dir, 'Engine', 'Source', 'Programs', ...
+    'PixelStreaming', 'WebServers', 'SignallingWebServer', 'run.bat');
+system([signalling_server_path ' &']);  % 后台执行
+
+pause(3);
 
 %% 调用虚幻引擎
 % % 参考：toolbox\shared\drivingscenario\+driving\+scenario\+internal\GamingEngineScenarioAnimator.m
@@ -83,6 +89,7 @@ ue_viewer = designer.getGamingEngineViewer(1, 1);
 % 开始仿真（相当于点击驾驶场景设计器菜单中的运行）
 designer.Simulator.run()
 
+% 使用自带浏览器查看：127.0.0.1
 
 % ue_viewer.delete()  % 关闭虚幻引擎场景查看器（成功）
 end
