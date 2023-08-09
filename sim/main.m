@@ -1,3 +1,10 @@
+function main(exe_path)
+% 该变量指向导出的可执行场景所在的路径
+% exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
+% exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe";
+
+% TODO：启动虚幻引擎信令服务
+
 %% 调用虚幻引擎
 % % 参考：toolbox\shared\drivingscenario\+driving\+scenario\+internal\GamingEngineScenarioAnimator.m
 % World = sim3d.World(sim3d.engine.Env.AutomotiveExe(), "/Game/Maps/EmptyGrass4k4k"); % EmptyGrass4k4k or BlackLake
@@ -6,11 +13,8 @@
 % matlab\toolbox\shared\sim3d\sim3d\+sim3d\+engine -> AutomotiveExe()
 % 原来的path路径是：matlab\toolbox\shared\sim3d_projects\automotive_project
 % 自定义的是：D:\project\EmptyGrass4k4k\WindowsNoEditor
-getpref('Simulation3D', 'UnrealPath');
+% getpref('Simulation3D', 'UnrealPath');
 
-% 该变量指向导出的可执行场景所在的路径
-% exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
-exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe";
 
 % 用于像素流转发
 ExecCmds = " -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
@@ -81,6 +85,7 @@ designer.Simulator.run()
 
 
 % ue_viewer.delete()  % 关闭虚幻引擎场景查看器（成功）
+end
 
 
 

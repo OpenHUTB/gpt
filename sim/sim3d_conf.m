@@ -1,6 +1,7 @@
-
+function sim3d_conf(ue_proj_dir)
+% 测试：sim3d_conf('C:\Buffer')
 %% 环境配置
-ue_proj_dir = "D:\project";
+% ue_proj_dir = "D:\project";
 project_name="AutoVrtlEnv";
 
 addpath(fullfile(toolboxdir('shared'), 'sim3d', 'sim3d'))
@@ -23,5 +24,6 @@ open(editor);
 % 参数配置
 % 参考：https://ww2.mathworks.cn/help/releases/R2022b/driving/ug/package-custom-scenes-into-executable.html
 % https://docs.unrealengine.com/4.26/zh-CN/SharingAndReleasing/PixelStreaming/PixelStreamingIntro/
+end
 
 
