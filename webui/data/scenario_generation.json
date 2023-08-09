@@ -1,0 +1,1082 @@
+[
+  {
+    "instruction": "沿着半径为800米的圆弧，使用道路中心点创建弯曲的道路。弧开始于0°，结束于90°，并以5°的增量采样",
+    "input": "",
+    "output": "angs = '[0:5:90]';\\nR = 800;\\nroadcenters = R*[cosd(angs) sind(angs) zeros(size(angs))];\\nroadwidth = 10;\\ncr = road(scenario,roadcenters,roadwidth);\\n"
+  },
+  {
+    "instruction": "创建一条宽度为3，形状为8字形的道路",
+    "input": "",
+    "output": "roadCenters = [0  0  1\\n             20 -20  1\\n             20  20  1\\n            -20 -20  1\\n            -20  20  1\\n              0   0  1];\\n\\nroadWidth = 3;\\nbankAngle = [0 15 15 -15 -15 0];\\nroad(scenario,roadCenters,roadWidth,bankAngle);\\n"
+  },
+  {
+    "instruction": "创建一条25米长的直道，在一个方向上有两条车道",
+    "input": "",
+    "output": "lm = [laneMarking('Solid')\\n      laneMarking('Dashed','Length',2,'Space',4)\\n      laneMarking('Solid')];\\nl = lanespec(2,'Marking',lm);\\nroad(scenario,[0 0 0; 25 0 0],'Lanes',l);\\n"
+  },
+  {
+    "instruction": "在场景中添加一个车辆。将车辆定位在坐标(20，-20)并以-15度偏航角定向",
+    "input": "",
+    "output": "ego = actor(scenario,'ClassID',1,'Position',[20 -20 0],'Yaw',-15);\\n"
+  },
+  {
+    "instruction": "在场景中创建一个身高为一米七的行人",
+    "input": "",
+    "output": "ped = actor(scenario,'ClassID',4,'Length',0.2,'Width',0.4,'Height',1.7);\\n"
+  },
+  {
+    "instruction": "创建一个包含弯曲双车道道路的驾驶场景",
+    "input": "",
+    "output": "scenario = drivingScenario('SampleTime',0.05);\\nroadcenters = [0 0; 24.2 27.7; 50 30];\\nlspec = lanespec(2);\\nroad(scenario,roadcenters,'Lanes',lspec);\\n"
+  },
+  {
+    "instruction": "向场景中添加车辆。设置车辆进入弯道时减速的轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario('SampleTime',0.05);\\nroadcenters = [0 0; 24.2 27.7; 50 30];\\nlspec = lanespec(2);\\nroad(scenario,roadcenters,'Lanes',lspec);\\n\\nv = vehicle(scenario,'ClassID',1);\\nwaypoints = [2.6 1.0; 23.6 24.9; 45.5 28.6];\\nspeed = [9 8 9];\\nsmoothTrajectory(v,waypoints,speed)\\n\\n% 绘制场景并运行模拟\\nplot(scenario,'Waypoints','on','RoadCenters','on')\\nwhile advance(scenario)\\n    pause(scenario.SampleTime)\\nend\\n"
+  },
+  {
+    "instruction": "创建一个驾驶场景，其中一辆汽车在双车道道路上超过一辆静止的汽车。",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroad(scenario,[0 0; 10 0; 53 -20],'lanes',lanespec(2));\\nplot(scenario,'Waypoints','on');\\nstationaryCar = vehicle(scenario,'ClassID',1,'Position',[25 -5.5 0],'Yaw',-22);\\n\\npassingCar = vehicle(scenario,'ClassID',1);\\nwaypoints = [1 -1.5; 16.36 -2.5; 17.35 -2.765; ...\\n            23.83 -2.01; 24.9 -2.4; 50.5 -16.7];\\nspeed = 15; % m/s\\nsmoothTrajectory(passingCar,waypoints,speed);\\n"
+  },
+  {
+    "instruction": "记录驾驶场景模拟",
+    "input": "",
+    "output": "rec = record(scenario);\\n"
+  },
+  {
+    "instruction": "运行仿真并显示车辆在每个时间步长的位置",
+    "input": "",
+    "output": "scenario = drivingScenario('SampleTime',0.1);\\n\\nroadcenters= [0 0 0; 25 0 0];\\nroad(scenario,roadcenters)\\n\\nv = vehicle(scenario,'ClassID',1);\\n\\nwaypoints = [5 0 0; 20 0 0];\\nspeed = 20; % m/s\\nsmoothTrajectory(v,waypoints,speed)\\n\\nplot(scenario)\\n\\nwhile advance(scenario)\\n    fprintf('Vehicle location: %0.2f meters at t = %0.0f ms\\n', ...\\n            v.Position(1), ...\\n            scenario.SimulationTime * 1000)\\nend\\n"
+  },
+  {
+    "instruction": "重新启动模拟。增加采样时间为0.2并重新运行模拟。",
+    "input": "",
+    "output": "scenario = drivingScenario('SampleTime',0.1);\\n\\nroadcenters= [0 0 0; 25 0 0];\\nroad(scenario,roadcenters)\\n\\nv = vehicle(scenario,'ClassID',1);\\n\\nwaypoints = [5 0 0; 20 0 0];\\nspeed = 20; % m/s\\nsmoothTrajectory(v,waypoints,speed)\\n\\nplot(scenario)\\n\\nwhile advance(scenario)\\n    fprintf('Vehicle location: %0.2f meters at t = %0.0f ms\\n', ...\\n            v.Position(1), ...\\n            scenario.SimulationTime * 1000)\\nend\\n\\nrestart(scenario);\\nscenario.SampleTime = 0.2;\\n\\nwhile advance(scenario)\\n    fprintf('Vehicle location: %0.2f meters at t = %0.0f ms\\n', ...\\n            v.Position(1), ...\\n            scenario.SimulationTime * 1000)\\nend\\n"
+  },
+  {
+    "instruction": "用默认宽度添加两条直线道路，两端使用道路中心点。在第一条笔直的道路两侧加护栏",
+    "input": "",
+    "output": "roadcenters = [700 0 0; 100 0 0];\\nsr1 = road(scenario,roadcenters);\\nbarrier(scenario,sr1)\\nbarrier(scenario,sr1,'RoadEdge','left')\\nroadcenters = [400 400 0; 0 0 0];\\nroad(scenario,roadcenters);\\n"
+  },
+  {
+    "instruction": "在场景中添加一辆汽车和一辆自行车,把车停在第一条直路的起点,把自行车放在路的更远的地方。",
+    "input": "",
+    "output": "car = vehicle(scenario,'ClassID',1,'Position',[700 0 0], ...\\n    'Length',3,'Width',2,'Height',1.6);\\nbicycle = actor(scenario,'ClassID',3,'Position',[706 376 0]', ...\\n    'Length',2,'Width',0.45,'Height',1.5);\\n"
+  },
+  {
+    "instruction": "获取场景中道路边界",
+    "input": "",
+    "output": "rbdry = roadBoundaries(scenario);\\n"
+  },
+  {
+    "instruction": "在场景中添加一条双车道道路",
+    "input": "",
+    "output": "roadCenters = [0 1 0; 53 1 0];\\nlaneSpecification = lanespec([1 1]);\\nroad(scenario,roadCenters,'Lanes',laneSpecification);\\n"
+  },
+  {
+    "instruction": "再加一条与第一条路相交成直角的路，形成T形",
+    "input": "",
+    "output": "roadCenters = [20.3 38.4 0; 20 3 0];\\nlaneSpecification = lanespec(2);\\nroad(scenario,roadCenters,'Lanes',laneSpecification)\\n"
+  },
+  {
+    "instruction": "为四车道的道路创建一个lanespec对象。使用laneMarking函数指定它的五个车道标记。中线为双实双黄。最外层的线条是纯白色的。内线是虚线和白色的",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 80 0];\\nsolidW = laneMarking('Solid','Width',0.3);\\ndashW = laneMarking('Dashed','Space',5);\\ndoubleY = laneMarking('DoubleSolid','Color','yellow');\\nlspec = lanespec([2 2],'Width',[5 5 5 5], ...\\n    'Marking',[solidW dashW doubleY dashW solidW]);\\nroad(scenario,roadCenters,'Lanes',lspec);\\nplot(scenario)\\n"
+  },
+  {
+    "instruction": "创建一个有s型弯道的道路的驾驶场景",
+    "input": "",
+    "output": "\\nroadcenters = [-35 20 0; -20 -20 0; 0 0 0; 20 20 0; 35 -20 0];\\n"
+  },
+  {
+    "instruction": "创建模拟步骤之间的时间间隔为0.05的场景",
+    "input": "",
+    "output": "scenario = drivingScenario(\"SampleTime\",0.05);\\n"
+  },
+  {
+    "instruction": "创建模拟步骤之间的时间间隔为0.02,模拟结束时间为5秒的场景",
+    "input": "",
+    "output": "scenario = drivingScenario(\"SampleTime\",0.05,\"StopTime\",5);\\n"
+  },
+  {
+    "instruction": "生成一段路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的路和四辆车，车分别在一二三四车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\nv4 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv1.Position = [0 5 0]; % 放置在第一条车道上\\nv2.Position = [0 2 0]; % 放置在第二条车道上\\nv3.Position = [0 -2 0]; % 放置在第三条车道上\\nv4.Position = [0 -5 0]; % 放置在第四条车道上\\n"
+  },
+  {
+    "instruction": "生成一段1000m的四车道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 1000 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段路和三辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 0 0]; % 根据需要调整位置坐标\\nv2.Position = [10 0 0];\\nv3.Position = [20 0 0];\\n"
+  },
+  {
+    "instruction": "生成一段两车道路和三辆车，三辆不在一列上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 1 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -1 0];\\nv3.Position = [20 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段两车道路和三辆车且三辆车同一水平位置",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [0 3 0]; % 根据需要调整位置坐标\\nv2.Position = [0 0 0];\\nv3.Position = [0 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段三车道路和三辆车且三辆车同一水平位置",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [0 3 0]; % 根据需要调整位置坐标\\nv2.Position = [0 0 0];\\nv3.Position = [0 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段三车道路和三辆车且三辆车在中间车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 0 0]; % 根据需要调整位置坐标\\nv2.Position = [10 0 0];\\nv3.Position = [20 0 0];\\n"
+  },
+  {
+    "instruction": "生成一段三车道路和三辆车且三辆车在第一条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 2 0]; % 根据需要调整位置坐标\\nv2.Position = [10 2 0];\\nv3.Position = [20 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段三车道路和三辆车且三辆车在第三条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -3 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -3 0];\\nv3.Position = [20 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段四车道路和三辆车且三辆车在第一条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 5 0]; % 根据需要调整位置坐标\\nv2.Position = [10 5 0];\\nv3.Position = [20 5 0];\\n"
+  },
+  {
+    "instruction": "生成一段四车道路和三辆车且三辆车在第二条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 2 0]; % 根据需要调整位置坐标\\nv2.Position = [10 2 0];\\nv3.Position = [20 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段路和两辆车，且第二辆车在第一辆车后面",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(2));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [-2 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段四车道路和三辆车且三辆车在第四条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -5 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -5 0];\\nv3.Position = [20 -5 0];\\n"
+  },
+  {
+    "instruction": "生成一段四车道路和四辆车且四辆车在第四条车道上，模拟一个堵车的场景",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\nv4 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -5 0]; % 根据需要调整位置坐标\\nv2.Position = [6 -5 0];\\nv3.Position = [12 -5 0];\\nv4.Position = [18 -5 0];\\n"
+  },
+  {
+    "instruction": "生成一段两车道路和八辆车，模拟一个堵车的场景",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\nv4 = vehicle(scenario,'ClassID',1);\\nv5 = vehicle(scenario,'ClassID',1);\\nv6 = vehicle(scenario,'ClassID',1);\\nv7 = vehicle(scenario,'ClassID',1);\\nv8 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -2 0]; % 根据需要调整位置坐标\\nv2.Position = [6 -2 0];\\nv3.Position = [12 -2 0];\\nv4.Position = [18 -2 0];\\nv5.Position = [1 2 0];\\nv6.Position = [6 2 0];\\nv7.Position = [12 2 0];\\nv8.Position = [18 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段200m的路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段200m的路和两辆车，且第二辆车在第一辆车后面",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(2));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [-2 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段200m的三车道的路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段200m的三车道的路和两辆车，车分别在一二车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 将x坐标设置为负数，放置在第一条车道上\\n"
+  },
+  {
+    "instruction": "生成一段200m的三车道的路和三辆车，车分别在一二三车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 放置在第一条车道上\\nv3.Position = [0 -4 0]; % 放置在第三条车道上\\n"
+  },
+  {
+    "instruction": "生成一段200m的四车道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段200m的四车道路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(2));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段200m三车道的路和四辆车，车分别在一二三四车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\nv4 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv1.Position = [1 4 0];\\nv2.Position = [0 4 0]; % 放置在第一条车道上\\nv3.Position = [0 -4 0]; % 放置在第三条车道上\\nv4.Position = [0 10 0]; % 放置在第四条车道上\\n"
+  },
+  {
+    "instruction": "生成一段200m的路和三辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 0 0]; % 根据需要调整位置坐标\\nv2.Position = [10 0 0];\\nv3.Position = [20 0 0];\\n"
+  },
+  {
+    "instruction": "生成一段200m段两车道路和三辆车，三辆不在一列上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 1 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -1 0];\\nv3.Position = [20 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段200m的两车道路和三辆车且三辆车同一水平位置",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [0 3 0]; % 根据需要调整位置坐标\\nv2.Position = [0 0 0];\\nv3.Position = [0 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段200m的三车道路和三辆车且三辆车在中间车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 0 0]; % 根据需要调整位置坐标\\nv2.Position = [10 0 0];\\nv3.Position = [20 0 0];\\n"
+  },
+  {
+    "instruction": "生成一段200m的三车道路和三辆车且三辆车在第三条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -3 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -3 0];\\nv3.Position = [20 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段200m的四车道路和三辆车且三辆车在第一条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 5 0]; % 根据需要调整位置坐标\\nv2.Position = [10 5 0];\\nv3.Position = [20 5 0];\\n"
+  },
+  {
+    "instruction": "生成一段200m的四车道路和三辆车且三辆车在第二条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 2 0]; % 根据需要调整位置坐标\\nv2.Position = [10 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段200m的四车道路和三辆车且三辆车在第四条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -5 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -5 0];\\nv3.Position = [20 -5 0];\\n"
+  },
+  {
+    "instruction": "生成一段200m的四车道路和四辆车且四辆车在第四条车道上，模拟一个堵车的场景",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\nv4 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -5 0]; % 根据需要调整位置坐标\\nv2.Position = [6 -5 0];\\nv3.Position = [12 -5 0];\\nv4.Position = [18 -5 0];\\n"
+  },
+  {
+    "instruction": "生成一段三车道的路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段200m两车道路和八辆车，模拟一个堵车的场景",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\nv4 = vehicle(scenario,'ClassID',1);\\nv5 = vehicle(scenario,'ClassID',1);\\nv6 = vehicle(scenario,'ClassID',1);\\nv7 = vehicle(scenario,'ClassID',1);\\nv8 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -2 0]; % 根据需要调整位置坐标\\nv2.Position = [6 -2 0];\\nv3.Position = [12 -2 0];\\nv4.Position = [18 -2 0];\\nv5.Position = [1 2 0];\\nv6.Position = [6 2 0];\\nv7.Position = [12 2 0];\\nv8.Position = [18 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段400m的路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段400m的路和两辆车，且第二辆车在第一辆车后面",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(2));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [-2 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段400m的三车道的路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段400m的三车道的路和两辆车，车分别在一二车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 将x坐标设置为负数，放置在第一条车道上\\n"
+  },
+  {
+    "instruction": "生成一段400m的三车道的路和三辆车，车分别在一二三车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 放置在第一条车道上\\nv3.Position = [0 -4 0]; % 放置在第三条车道上\\n"
+  },
+  {
+    "instruction": "生成一段400m的四车道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段400m的四车道路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段400m三车道的路和四辆车，车分别在一二三四车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\nv4 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv1.Position = [1 4 0];\\nv2.Position = [0 4 0]; % 放置在第一条车道上\\nv3.Position = [0 -4 0]; % 放置在第三条车道上\\nv4.Position = [0 10 0]; % 放置在第四条车道上\\n"
+  },
+  {
+    "instruction": "生成一段400m的路和三辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 0 0]; % 根据需要调整位置坐标\\nv2.Position = [10 0 0];\\nv3.Position = [20 0 0];\\n"
+  },
+  {
+    "instruction": "生成一段三车道的路和两辆车，车分别在一二车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 将x坐标设置为负数，放置在第一条车道上\\n\\n"
+  },
+  {
+    "instruction": "生成一段400m段两车道路和三辆车，三辆不在一列上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 1 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -1 0];\\nv3.Position = [20 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段400m的两车道路和三辆车且三辆车同一水平位置",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [0 3 0]; % 根据需要调整位置坐标\\nv2.Position = [0 0 0];\\nv3.Position = [0 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段400m的三车道路和三辆车且三辆车在中间车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 0 0]; % 根据需要调整位置坐标\\nv2.Position = [10 0 0];\\nv3.Position = [20 0 0];\\n"
+  },
+  {
+    "instruction": "生成一段400m的三车道路和三辆车且三辆车在第三条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -3 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -3 0];\\nv3.Position = [20 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段400m的四车道路和三辆车且三辆车在第一条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 5 0]; % 根据需要调整位置坐标\\nv2.Position = [10 5 0];\\nv3.Position = [20 5 0];\\n"
+  },
+  {
+    "instruction": "生成一段400m的四车道路和三辆车且三辆车在第二条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 2 0]; % 根据需要调整位置坐标\\nv2.Position = [10 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段400m的四车道路和三辆车且三辆车在第四条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -5 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -5 0];\\nv3.Position = [20 -5 0];\\n"
+  },
+  {
+    "instruction": "生成一段400m的四车道路和四辆车且四辆车在第四条车道上，模拟一个堵车的场景",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\nv4 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -5 0]; % 根据需要调整位置坐标\\nv2.Position = [6 -5 0];\\nv3.Position = [12 -5 0];\\nv4.Position = [18 -5 0];\\n"
+  },
+  {
+    "instruction": "生成一段400m两车道路和八辆车，模拟一个堵车的场景",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 400 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\nv4 = vehicle(scenario,'ClassID',1);\\nv5 = vehicle(scenario,'ClassID',1);\\nv6 = vehicle(scenario,'ClassID',1);\\nv7 = vehicle(scenario,'ClassID',1);\\nv8 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -2 0]; % 根据需要调整位置坐标\\nv2.Position = [6 -2 0];\\nv3.Position = [12 -2 0];\\nv4.Position = [18 -2 0];\\nv5.Position = [1 2 0];\\nv6.Position = [6 2 0];\\nv7.Position = [12 2 0];\\nv8.Position = [18 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段600m的路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的路和三辆车，车分别在一二三车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 放置在第一条车道上\\nv3.Position = [0 -4 0]; % 放置在第三条车道上\\n\\n"
+  },
+  {
+    "instruction": "生成一段600m的路和两辆车，且第二辆车在第一辆车后面",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(2));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [-2 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段600m的三车道的路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段600m的三车道的路和两辆车，车分别在一二车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 将x坐标设置为负数，放置在第一条车道上\\n"
+  },
+  {
+    "instruction": "生成一段600m的三车道的路和三辆车，车分别在一二三车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 放置在第一条车道上\\nv3.Position = [0 -4 0]; % 放置在第三条车道上\\n"
+  },
+  {
+    "instruction": "生成一段600m的四车道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段600m的四车道路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段600m三车道的路和四辆车，车分别在一二三四车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\nv4 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv1.Position = [1 4 0];\\nv2.Position = [0 4 0]; % 放置在第一条车道上\\nv3.Position = [0 -4 0]; % 放置在第三条车道上\\nv4.Position = [0 10 0]; % 放置在第四条车道上\\n"
+  },
+  {
+    "instruction": "生成一段600m的路和三辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 0 0]; % 根据需要调整位置坐标\\nv2.Position = [10 0 0];\\nv3.Position = [20 0 0];\\n"
+  },
+  {
+    "instruction": "生成一段600m段两车道路和三辆车，三辆不在一列上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 1 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -1 0];\\nv3.Position = [20 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段600m的两车道路和三辆车且三辆车同一水平位置",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [0 3 0]; % 根据需要调整位置坐标\\nv2.Position = [0 0 0];\\nv3.Position = [0 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段四车道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv = vehicle(scenario,'ClassID',1);\\nplot(scenario,'RoadCenters','on','Centerline','on');\\n"
+  },
+  {
+    "instruction": "生成一段600m的三车道路和三辆车且三辆车在中间车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 0 0]; % 根据需要调整位置坐标\\nv2.Position = [10 0 0];\\nv3.Position = [20 0 0];\\n"
+  },
+  {
+    "instruction": "生成一段600m的三车道路和三辆车且三辆车在第三条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -3 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -3 0];\\nv3.Position = [20 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段600m的四车道路和三辆车且三辆车在第一条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 5 0]; % 根据需要调整位置坐标\\nv2.Position = [10 5 0];\\nv3.Position = [20 5 0];\\n"
+  },
+  {
+    "instruction": "生成一段600m的四车道路和三辆车且三辆车在第二条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 2 0]; % 根据需要调整位置坐标\\nv2.Position = [10 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段600m的四车道路和三辆车且三辆车在第四条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -5 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -5 0];\\nv3.Position = [20 -5 0];\\n"
+  },
+  {
+    "instruction": "生成一段600m的四车道路和四辆车且四辆车在第四条车道上，模拟一个堵车的场景",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\nv4 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -5 0]; % 根据需要调整位置坐标\\nv2.Position = [6 -5 0];\\nv3.Position = [12 -5 0];\\nv4.Position = [18 -5 0];\\n"
+  },
+  {
+    "instruction": "生成一段600m两车道路和八辆车，模拟一个堵车的场景",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 600 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\nv4 = vehicle(scenario,'ClassID',1);\\nv5 = vehicle(scenario,'ClassID',1);\\nv6 = vehicle(scenario,'ClassID',1);\\nv7 = vehicle(scenario,'ClassID',1);\\nv8 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -2 0]; % 根据需要调整位置坐标\\nv2.Position = [6 -2 0];\\nv3.Position = [12 -2 0];\\nv4.Position = [18 -2 0];\\nv5.Position = [1 2 0];\\nv6.Position = [6 2 0];\\nv7.Position = [12 2 0];\\nv8.Position = [18 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段800m的路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段800m的路和两辆车，且第二辆车在第一辆车后面",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(2));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [-2 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段800m的三车道的路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段四车道路和两辆车，且第二辆车速度比第一辆慢",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nplot(scenario,'RoadCenters','on','Centerline','on');\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n\\n% 设置车辆初始速度\\nv1.Velocity = 20; % 第一辆车的初始速度\\nv2.Velocity = 25; % 第二辆车的初始速度\\n"
+  },
+  {
+    "instruction": "生成一段800m的三车道的路和两辆车，车分别在一二车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 将x坐标设置为负数，放置在第一条车道上\\n"
+  },
+  {
+    "instruction": "生成一段800m的三车道的路和三辆车，车分别在一二三车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 放置在第一条车道上\\nv3.Position = [0 -4 0]; % 放置在第三条车道上\\n"
+  },
+  {
+    "instruction": "生成一段800m的四车道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段800m的四车道路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段800m三车道的路和四辆车，车分别在一二三四车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\nv4 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv1.Position = [1 4 0];\\nv2.Position = [0 4 0]; % 放置在第一条车道上\\nv3.Position = [0 -4 0]; % 放置在第三条车道上\\nv4.Position = [0 10 0]; % 放置在第四条车道上\\n"
+  },
+  {
+    "instruction": "生成一段800m的路和三辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 0 0]; % 根据需要调整位置坐标\\nv2.Position = [10 0 0];\\nv3.Position = [20 0 0];\\n"
+  },
+  {
+    "instruction": "生成一段800m段两车道路和三辆车，三辆不在一列上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 1 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -1 0];\\nv3.Position = [20 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段800m的两车道路和三辆车且三辆车同一水平位置",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [0 3 0]; % 根据需要调整位置坐标\\nv2.Position = [0 0 0];\\nv3.Position = [0 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段800m的三车道路和三辆车且三辆车在中间车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 0 0]; % 根据需要调整位置坐标\\nv2.Position = [10 0 0];\\nv3.Position = [20 0 0];\\n"
+  },
+  {
+    "instruction": "生成一段800m的三车道路和三辆车且三辆车在第三条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -3 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -3 0];\\nv3.Position = [20 -3 0];\\n"
+  },
+  {
+    "instruction": "生成一段四车道路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(4));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段800m的四车道路和三辆车且三辆车在第一条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 5 0]; % 根据需要调整位置坐标\\nv2.Position = [10 5 0];\\nv3.Position = [20 5 0];\\n"
+  },
+  {
+    "instruction": "生成一段800m的四车道路和三辆车且三辆车在第二条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 2 0]; % 根据需要调整位置坐标\\nv2.Position = [10 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段800m的四车道路和三辆车且三辆车在第四条车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -5 0]; % 根据需要调整位置坐标\\nv2.Position = [10 -5 0];\\nv3.Position = [20 -5 0];\\n"
+  },
+  {
+    "instruction": "生成一段800m的四车道路和四辆车且四辆车在第四条车道上，模拟一个堵车的场景",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\nv4 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -5 0]; % 根据需要调整位置坐标\\nv2.Position = [6 -5 0];\\nv3.Position = [12 -5 0];\\nv4.Position = [18 -5 0];\\n"
+  },
+  {
+    "instruction": "生成一段800m两车道路和八辆车，模拟一个堵车的场景",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 800 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(2));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv3 = vehicle(scenario,'ClassID',1);\\nv4 = vehicle(scenario,'ClassID',1);\\nv5 = vehicle(scenario,'ClassID',1);\\nv6 = vehicle(scenario,'ClassID',1);\\nv7 = vehicle(scenario,'ClassID',1);\\nv8 = vehicle(scenario,'ClassID',1);\\n\\n% 调整车辆的初始位置\\nv1.Position = [1 -2 0]; % 根据需要调整位置坐标\\nv2.Position = [6 -2 0];\\nv3.Position = [12 -2 0];\\nv4.Position = [18 -2 0];\\nv5.Position = [1 2 0];\\nv6.Position = [6 2 0];\\nv7.Position = [12 2 0];\\nv8.Position = [18 2 0];\\n"
+  },
+  {
+    "instruction": "生成一段1000m的路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 1000 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(1));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段1000m的路和两辆车，且第二辆车在第一辆车后面",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 1000 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(2));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [-2 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段1000m的三车道的路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 1000 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [10 2 0]; % 根据需要调整位置坐标\\n"
+  },
+  {
+    "instruction": "生成一段1000m的三车道的路和两辆车，车分别在一二车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 1000 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 将x坐标设置为负数，放置在第一条车道上\\n"
+  },
+  {
+    "instruction": "生成一段1000m的三车道的路和三辆车，车分别在一二三车道上",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 1000 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\n\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n\\n% 调整第二辆车的初始位置\\nv2.Position = [0 4 0]; % 放置在第一条车道上\\nv3.Position = [0 -4 0]; % 放置在第三条车道上\\n"
+  },
+  {
+    "instruction": "生成一段30m三车道的30m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n\\n"
+  },
+  {
+    "instruction": "生成一段路和两辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 120 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\ntrajectory(v3,[0 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段220m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 220 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一条长为120的道路和三辆车v1,v2,v3;v1的位置为x=68 y=-1 z=0 ,v2的位置为x=83 y=-2 z=0,v3固定运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 120 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\nv1.Position = [68 -1 0];\\nv2.Position = [83 -2 0];\\ntrajectory(v3,[0 0; 50 0]);\\n"
+  },
+  {
+    "instruction": "生成一段四车道的道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(4));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [0 -4 0];%车辆v2的初始位置为x=0,y=-4,z=0\\nplot(scenario,'RoadCenters','on','Centerline','on');\\n"
+  },
+  {
+    "instruction": "生成一段三车道的道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 100 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[10 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "创建一条十字路口",
+    "input": "",
+    "output": "scenario = drivingScenario;\\n\\nroadCenters = [0 0; 50 0];\\n\\nroad(scenario, roadCenters, 'lanes', lanespec([1 2]));\\nroadCenters = [25 -25; 25  25];\\nroad(scenario, roadCenters, 'lanes', lanespec([1 1]));\\n"
+  },
+  {
+    "instruction": "创建一条三条道变两条道的道路",
+    "input": "",
+    "output": "scenario = drivingScenario;\\n\\nroadCenters = [0 0; 50 0];\\n\\n% Define an array of lane specifications for two one-way road segments.\\n% Notice that one lane drops in the second road segment.\\nlsArray = [lanespec(3) lanespec(2)];\\n\\n% Define a road segment connector object. Specify position to drop a lane\\n% and taper length.\\nlc = laneSpecConnector('Position','Left','TaperLength',30);\\n\\n% Combine lane specifications of road segments.\\nclspec = compositeLaneSpec(lsArray,'Connector',lc);\\n\\nroad(scenario,roadCenters,'lanes',clspec);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的40m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 40 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的50m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 50 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段100m三车道的道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 100 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[0 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段三车道的60m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 60 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的70m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 70 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的80m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 80 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的90m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 90 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的100m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 100 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的110m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 110 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的120m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 120 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的130m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 130 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的140m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 140 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的150m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 150 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段50m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 50 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段三车道的160m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 160 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的170m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 170 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的180m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 180 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的190m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 190 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的200m道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 200 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段三车道的110m的道路和一辆车并规定车的运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 110 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[1 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段三车道的120m的道路和一辆车并规定车的运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 120 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[1 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段三车道的130m的道路和一辆车并规定车的运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 130 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[1 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段三车道的140m的道路和一辆车并规定车的运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 140 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[1 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段三车道的150m的道路和一辆车并规定车的运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 150 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[1 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段50m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 50 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段三车道的160m的道路和一辆车并规定车的运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 160 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[1 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段三车道的170m的道路和一辆车并规定车的运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 170 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[1 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段三车道的180m的道路和一辆车并规定车的运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 180 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[1 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段三车道的190m的道路和一辆车并规定车的运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 190 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[1 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段30m的双车道路和两辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 30 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(2));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段三车道的210m的道路和一辆车并规定车的运动轨迹",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 210 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\ntrajectory(v,[1 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段60m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 60 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段70m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 70 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段80m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 80 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段90m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 90 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段110m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 110 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段120m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 120 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段130m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 130 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段140m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 140 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段150m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 150 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段50m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 50 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段160m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 160 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段170m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 170 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段180m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 180 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段190m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 190 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段210m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 210 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段220m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 220 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段230m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 230 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段240m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 240 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段250m的三车道的道路和两辆车，车辆v1的位置是x=0,y=4,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 250 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\n"
+  },
+  {
+    "instruction": "生成一段60m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 60 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段s型曲线道路和一辆车",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [ 0    0 0;\\n                  20  20 0;\\n                  40 -20 0;\\n                  60  20 0;\\n                  80 -20 0;\\n                 100   0 0 ];%一段s型曲线道路\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv = vehicle(scenario,'ClassID',1);\\n"
+  },
+  {
+    "instruction": "生成一段70m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 70 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段80m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 80 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段90m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 90 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段110m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 110 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段120m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 120 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段130m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 130 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段140m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 140 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段150m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 150 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段160m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 160 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段170m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 170 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段120m的道路和两辆车,规定车辆v1的运动轨迹,车辆v2的初始位置为x=4,y=2,z=0,车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 120 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\ntrajectory(v1,[0 0; 50 0]);%规定车辆v1的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段180m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 180 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段190m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 190 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段210m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 210 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段230m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 230 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段240m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 240 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段250m的三车道的道路和两辆车,车辆v1的初始位置为x=0,y=4,z=0,车辆v2的初始位置为x=10,y=-4;z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 250 0];\\nroad(scenario,roadCenters,'Lanes',lanespec(3));\\nv1 = vehicle(scenario,'ClassID',1);\\nv2 = vehicle(scenario,'ClassID',1);%创建第二辆小车\\n% 调整车辆的初始位置\\nv1.Position = [0 4 0];%车辆v1的初始位置为x=0,y=4,z=0\\nv2.Position = [10 -4 0];%车辆v2的初始位置为x=10,y=-4;z=0\\n"
+  },
+  {
+    "instruction": "生成一段60m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 60 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段70m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 70 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段80m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 80 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段90m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 90 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段120m的道路和两辆车,规定车辆v2的运动轨迹,车辆v1的初始位置为x=20,y=3,z=0,车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 120 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\ntrajectory(v2,[0 0; 50 0]);%规定车辆的运动轨迹\\n"
+  },
+  {
+    "instruction": "生成一段110m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 110 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段120m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 120 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段130m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 130 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段140m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 140 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段150m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 150 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段160m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 160 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段170m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 170 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段180m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 180 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段190m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 190 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成一段210m的三车道路和三辆车，车辆v1的初始位置为x=20,y=3,z=0，车辆v2的初始位置为x=4,y=2,z=0，车辆v3的初始位置为x=50,y=2,z=0",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 210 0];\\nroad(scenario, roadCenters, 'Lanes', lanespec(3));\\nv1 = vehicle(scenario, 'ClassID', 1);\\nv2 = vehicle(scenario, 'ClassID', 1);\\nv3 = vehicle(scenario, 'ClassID', 1);\\n% 调整车辆的初始位置\\nv1.Position = [20 -2 0];%车辆v1的初始位置为x=20,y=3,z=0\\nv2.Position = [4 2 0];%车辆v2的初始位置为x=4,y=2,z=0\\nv3.Position = [50 2 0];%车辆v3的初始位置为x=50,y=2,z=0\\n"
+  },
+  {
+    "instruction": "生成交叉路口",
+    "input": "",
+    "output": "scenario = drivingScenario;\\nroadCenters = [0 0; 50 0];\\nroad(scenario, roadCenters, \"lanes\", lanespec([1 2]));\\nroadCenters = [25 -25; 25  25];\\nroad(scenario, roadCenters, \"lanes\", lanespec([1 1]));\\n"
+  }
+]
