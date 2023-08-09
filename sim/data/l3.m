@@ -9,3 +9,4 @@ road(scenario,roadcenters);
 % 获取场景中道路边界
 rbdry = roadBoundaries(scenario);
 plot(scenario,'Centerline','on','RoadCenters','on');
+

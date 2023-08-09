@@ -4,3 +4,4 @@ roadcenters = [0 0; 24.2 27.7; 50 30];
 lspec = lanespec(2);
 road(scenario,roadcenters,'Lanes',lspec);
 plot(scenario)
+
