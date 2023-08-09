@@ -6,11 +6,15 @@
 % matlab\toolbox\shared\sim3d\sim3d\+sim3d\+engine -> AutomotiveExe()
 % 原来的path路径是：matlab\toolbox\shared\sim3d_projects\automotive_project
 % 自定义的是：D:\project\EmptyGrass4k4k\WindowsNoEditor
-getpref('Simulation3D', 'UnrealPath')
+getpref('Simulation3D', 'UnrealPath');
 
 % 该变量指向导出的可执行场景所在的路径
 % exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
 exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe";
+
+% 用于像素流转发
+ExecCmds = " -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
+setpref('Simulation3D', 'ExecCmds', ExecCmds)
 
 % ExecutablePath' 的值必须满足函数: @(x)isstring(x)||isempty(x)
 setpref('Simulation3D', 'UnrealPath', exe_path)
