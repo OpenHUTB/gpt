@@ -8,3 +8,4 @@ v2 = vehicle(scenario, 'ClassID', 1);
 
 % 调整第二辆车的初始位置
 v2.Position = [0 4 0]; % 将x坐标设置为负数，放置在第一条车道上
+
