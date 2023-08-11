@@ -4,6 +4,7 @@
 
 ## Docker 配置
 1. [win10上配置Docker](https://blog.csdn.net/weixin_44649780/article/details/128335908) 。
+参考[使用Docker在Linux服务器本地部署PaddleSpeech Web服务](https://blog.csdn.net/m0_65099796/article/details/131770806) 。
 
 2. 启动容器：
 ```shell
