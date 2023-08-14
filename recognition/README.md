@@ -12,6 +12,11 @@ docker run -t -d toolsmiths/ubuntu16.04-build:gpdb5-v192
 ```
 
 ## 构建镜像
+查找有哪些镜像
+```shell
+docker search paddle
+registry.baidubce.com/paddlepaddle/paddle
+```
 ```shell
 docker build -t baidu/speech:v1 .
 ```
