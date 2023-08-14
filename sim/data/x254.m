@@ -1,0 +1,13 @@
+% 定义用于填充停车场的停车位,修改车位的宽度、长度或角度，以及车道标记的宽度和强度。
+width = 2.6; % m
+length = 5.5; % m
+angle = 90; % deg
+markingWidth = 0.15;
+markingStrength = 1;
+
+space = parkingSpace(Width=width, ...
+                    Length=length, ...
+                    Angle=angle, ...
+                    MarkingWidth=markingWidth, ...
+                    MarkingStrength=markingStrength);
+plot(space)
