@@ -1,6 +1,6 @@
 function main(exe_dir)
 % 参数exe_path指向导出的可执行场景所在的路径
-% 运行示例，服务器地址：main('C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor')
+% 运行示例，本服务器地址：main('C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor')
 % exe_path = "C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor\XianJia.exe -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
 
 % TODO：启动虚幻引擎信令服务
