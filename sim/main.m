@@ -1,10 +1,10 @@
 function main(exe_dir)
 % 参数exe_path指向导出的可执行场景所在的路径
-% 运行示例：main('D:\project\EmptyGrass4k4k\WindowsNoEditor')
-% exe_path = "D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
+% 运行示例，本服务器地址：main('C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor')
+% exe_path = "C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor\XianJia.exe -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
 
 % TODO：启动虚幻引擎信令服务
-exe_path = fullfile(exe_dir, 'AutoVrtlEnv.exe');
+exe_path = fullfile(exe_dir, 'XianJia.exe');
 signalling_server_path = fullfile(exe_dir, 'Engine', 'Source', 'Programs', ...
     'PixelStreaming', 'WebServers', 'SignallingWebServer', 'run.bat');
 system([signalling_server_path ' &']);  % 后台执行
