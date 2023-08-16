@@ -16,7 +16,7 @@ while ~feof(fid)
         instruction_str = tline;  % 获取指令
         continue;
     end
-    fstr = strcat(fstr, tline, "\n");
+    fstr = strcat(fstr, tline, newline);  % 要保留换行符转义字符 \n，使用 newline 函数，而不是\n。
 end
 
 fclose(fid);
