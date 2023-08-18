@@ -1,5 +1,6 @@
 function main(exe_path)
 % 参数exe_path指向导出的可执行场景所在的路径
+% 运行草地场景：main('C:\Buffer\gpt\WindowsNoEditor\AutoVrtlEnv.exe')
 % 运行草地场景：main('D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe')
 % 运行自定义场景：main('C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor\XianJia.exe')
 
