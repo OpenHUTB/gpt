@@ -21,7 +21,6 @@ pause(3);
 % 自定义的是：D:\project\EmptyGrass4k4k\WindowsNoEditor
 % getpref('Simulation3D', 'UnrealPath');
 
-
 % 用于像素流转发
 ExecCmds = " -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
 setpref('Simulation3D', 'ExecCmds', ExecCmds)
@@ -75,7 +74,9 @@ designer.Simulator.run()
 
 % 使用自带浏览器查看：127.0.0.1
 
+%% 清除环境
 % ue_viewer.delete()  % 关闭虚幻引擎场景查看器（成功）
+rmpref('Simulation3D', 'UnrealPath')
 end
 
 
