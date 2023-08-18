@@ -1,9 +1,17 @@
-function main(exe_path)
+function main(varargin)
 % 参数exe_path指向导出的可执行场景所在的路径
+% 将可执行场景放到WindowsNoEditor目录下，传入默认参数：main()
 % 运行草地场景：main('C:\Buffer\gpt\WindowsNoEditor\AutoVrtlEnv.exe')
 % 运行草地场景：main('D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe')
 % 运行自定义场景：main('C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor\XianJia.exe')
 
+% todo: 虚幻引擎启动时候过长，已经无响应了，需要杀死进程重新启动
+
+if nargin < 1
+    exe_path = 'WindowsNoEditor\AutoVrtlEnv.exe';
+else
+    exe_path = varargin{1};
+end
 % 初始化环境
 % 如果有dbstop if error则运行报错
 dbclear if error
@@ -13,7 +21,7 @@ addpath(fullfile(proj_dir, 'utils'));
 
 % 杀死之前存在的信令服务
 kill_process('node.exe');
-kill_process('cmd.exe');
+% kill_process('cmd.exe');
 % todo: 存在node.exe就不再启动了
 % 杀死之前的循环引擎服务
 kill_process('AutoVrtlEnv.exe');
