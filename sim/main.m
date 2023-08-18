@@ -6,33 +6,50 @@ function main(varargin)
 % 运行自定义场景：main('C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor\XianJia.exe')
 
 % todo: 虚幻引擎启动时候过长，已经无响应了，需要杀死进程重新启动
+% 有时候启动没有道路
+% 去掉网页的两次点击
 
 if nargin < 1
     exe_path = 'WindowsNoEditor\AutoVrtlEnv.exe';
 else
     exe_path = varargin{1};
 end
+
 % 初始化环境
 % 如果有dbstop if error则运行报错
 dbclear if error
-% 添加杀死进程的工具路径
-proj_dir = fileparts(fileparts(mfilename('fullpath')));
-addpath(fullfile(proj_dir, 'utils'));
 
-% 杀死之前存在的信令服务
-kill_process('node.exe');
-% kill_process('cmd.exe');
+
+%% 杀死之前已有的进程
+% proj_dir = fileparts(fileparts(mfilename('fullpath')));
+% addpath(fullfile(proj_dir, 'utils'));
+[~,cmdout] = system('tasklist');
+
+cmdout = split(cmdout,strcat(10));
+WINWORD = cmdout(contains(cmdout, 'node.exe'),:);
+if isempty(WINWORD)  % 进程不存在则启动，不需要杀
+    exe_dir = fileparts(exe_path);
+    signalling_server_path = fullfile(exe_dir, 'Engine', 'Source', 'Programs', ...
+        'PixelStreaming', 'WebServers', 'SignallingWebServer', 'run.bat');
+    system([signalling_server_path ' &']);  % 后台执行
+
+    pause(3);
+    % 杀死之前存在的信令服务
+    % kill_process('node.exe');
+    % kill_process('cmd.exe');
+end
+
 % todo: 存在node.exe就不再启动了
 % 杀死之前的循环引擎服务
-kill_process('AutoVrtlEnv.exe');
+% kill_process('AutoVrtlEnv.exe');
+WINWORD = cmdout(contains(cmdout, 'AutoVrtlEnv.exe'),:);
+for i = 1 : numel(WINWORD)
+    cur_process = WINWORD{i};
+    cur_process_info = split( cur_process,' ');
+    % 杀死指定进程
+    system(strcat('taskkill /pid' , 32 , cur_process_info{ find( ismember( cur_process_info, 'Console' ) , 1 ) - 1 } , 32 , ' /f' ) );
+end
 
-%%
-exe_dir = fileparts(exe_path);
-signalling_server_path = fullfile(exe_dir, 'Engine', 'Source', 'Programs', ...
-    'PixelStreaming', 'WebServers', 'SignallingWebServer', 'run.bat');
-system([signalling_server_path ' &']);  % 后台执行
-
-pause(3);
 
 %% 调用虚幻引擎
 % % 参考：toolbox\shared\drivingscenario\+driving\+scenario\+internal\GamingEngineScenarioAnimator.m
@@ -98,9 +115,10 @@ designer.Simulator.run()
 % 使用自带浏览器查看：127.0.0.1
 
 %% 清除环境
-pause(3);
+% pause(3);
 % ue_viewer.delete()  % 关闭虚幻引擎场景查看器（成功）
 rmpref('Simulation3D', 'UnrealPath')
+% clear
 
 end
 
