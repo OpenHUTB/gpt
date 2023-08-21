@@ -19,7 +19,7 @@ sys.path.append('..')
 # 不支持执行量化模型（TheBloke/WizardCoder-15B-1.0-GPTQ）的预测
 
 # 执行推断：
-# --do_predict --model_name C:\Buffer\gpt\gpt-main\webui\models\WizardCoder-15B-V1.0 --prompt  创建一个驾驶场景对象scenario，并在场景中创建了一个车辆对象v1。
+# --do_predict --model_name C:\Buffer\gpt\gpt-main\webui\models\WizardCoder-15B-V1.0 --prompt  创建一个驾驶场景对象scenario，并在场景中创建了一个车辆对象v1。  --output_dir C:\\Buffer\\gpt\\gpt-main\\webui\\outputs-finetuned-wizardcoder\\
 # 需要将某次模型训练的检查点文件复制到./outputs-finetuned-wizardcoder/目录下，否则出现
 # Can't find 'adapter_config.json' at './outputs-finetuned-wizardcoder/'
 
