@@ -8,7 +8,7 @@
 
 ## [语音识别](https://github.com/OpenHUTB/gpt/tree/main/recognition) 
 
-将中文语音对话转换成文本，供 [代码生成模块](https://github.com/OpenHUTB/gpt/tree/main/webui) 使用，参考[使用深度学习训练语音命令识别模型](https://ww2.mathworks.cn/help/releases/R2022b/audio/ug/train-speech-command-recognition-model-using-deep-learning.html) 。
+将中文语音对话转换成文本，参考[基于飞桨 PaddlePaddle 的语音工具箱](https://github.com/PaddlePaddle/PaddleSpeech/blob/develop/README_cn.md) ，供 [代码生成模块](https://github.com/OpenHUTB/gpt/tree/main/webui) 使用。
 
 
 ## [代码生成](https://github.com/OpenHUTB/gpt/tree/main/webui) 
@@ -53,9 +53,15 @@
 ##  参考
 [WizardCoder](https://github.com/nlpxucan/WizardLM/tree/main/WizardCoder) 
 
+[基于飞桨 PaddlePaddle 的语音工具箱](https://github.com/PaddlePaddle/PaddleSpeech/blob/develop/README_cn.md)
+
+[基于PaddlePaddle实现的语音识别](https://github.com/yeyupiaoling/PaddlePaddle-DeepSpeech)
+
 [WebUI整合包视频](https://www.bilibili.com/video/BV1jj411S7YD)
 
 [matlab 实现 GPT2](https://github.com/matlab-deep-learning/transformer-models)
+
+[使用深度学习训练语音命令识别模型](https://ww2.mathworks.cn/help/releases/R2022b/audio/ug/train-speech-command-recognition-model-using-deep-learning.html) 
 
 [fauxpilot代码生成服务](https://github.com/fauxpilot/fauxpilot) 
 

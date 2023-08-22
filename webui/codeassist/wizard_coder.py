@@ -65,7 +65,7 @@ class WizardCoder:
     
         Args:
             model_name_or_path: Default Transformer model name or path to a directory containing Transformer model file (pytorch_nodel.bin).
-            peft_name: The name of the PEFT model to use.
+            peft_name: The name of the PEFT (Parameter-Efficient Fine-Tuning， 参数高效微调) model to use.
             special_words_dict: A dictionary of special words and their token ids.
             use_cuda: Use GPU if available.
             cuda_device: Which cuda device to use.

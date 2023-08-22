@@ -1,12 +1,13 @@
 import os
 import warnings
-
+  
 from modules.logging_colors import logger
 from modules.block_requests import RequestBlocker
 
-os.environ['GRADIO_ANALYTICS_ENABLED'] = 'False'
-os.environ['BITSANDBYTES_NOWELCOME'] = '1'
-warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
+# os.enviorn是一个字典，包含当前进程的环境变量（一些全局配置参数，在程序运行时通过代码访问或设置）
+os.environ['GRADIO_ANALYTICS_ENABLED'] = 'False'   # 自定义环境变量'GRADIO_ANALYTICS_ENABLED'  '启用梯度分析'
+os.environ['BITSANDBYTES_NOWELCOME'] = '1'  # 自定义环境变脸
+warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')  # 设置警告过滤器
 
 with RequestBlocker():
     import gradio as gr
@@ -50,7 +51,7 @@ from modules.text_generation import (
     stop_everything_event
 )
 
-
+# 定义模型加载封装函数，selected_model表示要加载的模型，loader一个加载模型的函数或者类，负责根据selected_model的信息加载对应的模型，autoload布尔值，用于指示是否在函数调用时自动加载模#型
 def load_model_wrapper(selected_model, loader, autoload=False):
     if not autoload:
         yield f"The settings for {selected_model} have been updated.\nClick on \"Load the model\" to load it."
@@ -61,51 +62,53 @@ def load_model_wrapper(selected_model, loader, autoload=False):
     else:
         try:
             yield f"Loading {selected_model}..."
-            shared.model_name = selected_model
-            unload_model()
+            shared.model_name = selected_model  # model_name为全局变量，shared一个可在整个程序#中共享的命名空间
+            unload_model()  # 确保卸载之前的模型，加载新模型
             if selected_model != '':
-                shared.model, shared.tokenizer = load_model(shared.model_name, loader)
+                shared.model, shared.tokenizer = load_model(shared.model_name, loader)  # 把模型对象#和分词器对象分别赋值
 
             if shared.model is not None:
                 yield f"Successfully loaded {selected_model}"
             else:
                 yield f"Failed to load {selected_model}."
+# 捕获异常，记录错误消息
         except:
             exc = traceback.format_exc()
             logger.error('Failed to load the model.')
             print(exc)
             yield exc
 
-
+# 定义加载lora的函数
 def load_lora_wrapper(selected_loras):
-    yield ("Applying the following LoRAs to {}:\n\n{}".format(shared.model_name, '\n'.join(selected_loras)))
-    add_lora_to_model(selected_loras)
+    yield ("Applying the following LoRAs to {}:\n\n{}".format(shared.model_name, '\n'.join(selected_loras)))  # 将selected_loras列表中的每个LoRA连接成一个字符串，每个LoRA之间用换行符分隔
+    add_lora_to_model(selected_loras)  # 调用add_lora_to_model函数，将selected_loras中的LoRAs应用到模型中
     yield ("Successfuly applied the LoRAs")
 
-
+# 定义加载提示文件的函数，fname为文件名称
 def load_prompt(fname):
     if fname in ['None', '']:
         return ''
-    elif fname.startswith('Instruct-'):
-        fname = re.sub('^Instruct-', '', fname)
-        file_path = Path(f'characters/instruction-following/{fname}.yaml')
-        if not file_path.exists():
+    elif fname.startswith('Instruct-'):  # 文件名是否以Instruct-开头
+        fname = re.sub('^Instruct-', '', fname)  # 则删除Instruct- 以空字符串''替代
+        file_path = Path(f'characters/instruction-following/{fname}.yaml')  # 构造处理后的文件路径
+        if not file_path.exists():  # 检查文件是否存在
             return ''
 
         with open(file_path, 'r', encoding='utf-8') as f:
-            data = yaml.safe_load(f)
-            output = ''
-            if 'context' in data:
+            data = yaml.safe_load(f)  # yaml.safe_load函数将解析文件内容并返回相应的Python数据结构
+            output = ''  # 初始化一个空字符串output，用于存储从提示文件中加载的内容
+            if 'context' in data:  # 检查data字典中是否存在键'context'
                 output += data['context']
-
+            # 替换规则
             replacements = {
                 '<|user|>': data['user'],
                 '<|bot|>': data['bot'],
                 '<|user-message|>': 'Input',
             }
 
+            # 将data['turn_template']字符串中的'<|bot-message|>'之前的部分进行字符串替换，然后将替换后的结果追加到output中
             output += utils.replace_all(data['turn_template'].split('<|bot-message|>')[0], replacements)
-            return output.rstrip(' ')
+            return output.rstrip(' ')  # 去除output的尾部空字符
     else:
         file_path = Path(f'prompts/{fname}.txt')
         if not file_path.exists():
@@ -114,41 +117,47 @@ def load_prompt(fname):
         with open(file_path, 'r', encoding='utf-8') as f:
             text = f.read()
             if text[-1] == '\n':
-                text = text[:-1]
+                text = text[:-1]  # 去掉最后的换行符
 
             return text
 
-
+# 计算token的数量
 def count_tokens(text):
     try:
         tokens = get_encoded_length(text)
         return f'{tokens} tokens in the input.'
-    except:
+    except:  # 如果tokenizer没有正确加载，提示错误
         return 'Couldn\'t count the number of tokens. Is a tokenizer loaded?'
 
-
+# 下载模型，repo_id-仓库id，gr.Progress()是gradio库中用于显示下载进度的一个特殊对象
 def download_model_wrapper(repo_id, progress=gr.Progress()):
     try:
-        downloader_module = importlib.import_module("download-model")
-        downloader = downloader_module.ModelDownloader()
-        repo_id_parts = repo_id.split(":")
+        downloader_module = importlib.import_module("download-model")  # 动态导入指定模块
+        downloader = downloader_module.ModelDownloader()  # 实例化对象赋给downloader变量
+        repo_id_parts = repo_id.split(":")  # 以":"为分隔符，分割repo_id，以列表形式返回
         model = repo_id_parts[0] if len(repo_id_parts) > 0 else repo_id
         branch = repo_id_parts[1] if len(repo_id_parts) > 1 else "main"
         check = False
 
-        progress(0.0)
+        progress(0.0)  # 更新加载进度
         yield ("Cleaning up the model/branch names")
+        # sanitize_model_and_branch_names是ModelDownloader类中的一个方法，用于清理和处理模型名称和分支名称。
         model, branch = downloader.sanitize_model_and_branch_names(model, branch)
 
         yield ("Getting the download links from Hugging Face")
+        # downloader对象的get_download_links_from_huggingface方法来获取模型下载链接、SHA-256哈希值和LoRA信息（如果有的话）
+        # links: 一个包含下载链接的列表，可能包含多个下载链接，用于不同类型的模型文件或数据。
+        # sha256: 一个SHA-256哈希值，用于校验下载文件的完整性。
+        # is_lora: 一个布尔值，表示是否为LoRA模型。
         links, sha256, is_lora = downloader.get_download_links_from_huggingface(model, branch, text_only=False)
 
         yield ("Getting the output folder")
-        output_folder = downloader.get_output_folder(model, branch, is_lora)
+        output_folder = downloader.get_output_folder(model, branch, is_lora)  # 成的模型下载文件的输出文件夹路径。
 
         if check:
             progress(0.5)
             yield ("Checking previously downloaded files")
+            # downloader对象的check_model_files方法，该方法用于检查之前下载的模型文件是否完整和正确
             downloader.check_model_files(model, branch, links, sha256, output_folder)
             progress(1.0)
         else:
@@ -159,29 +168,34 @@ def download_model_wrapper(repo_id, progress=gr.Progress()):
         progress(1.0)
         yield traceback.format_exc()
 
-
+# 创建模型菜单
 def create_model_menus():
     # Finding the default values for the GPU and CPU memories
-    total_mem = []
+    total_mem = []  # 存储每个GPU的总内存
     for i in range(torch.cuda.device_count()):
+        # 将GPU内存总大小从字节转换为MB
         total_mem.append(math.floor(torch.cuda.get_device_properties(i).total_memory / (1024 * 1024)))
 
+    # GPU内存默认配置
     default_gpu_mem = []
     if shared.args.gpu_memory is not None and len(shared.args.gpu_memory) > 0:
         for i in shared.args.gpu_memory:
-            if 'mib' in i.lower():
-                default_gpu_mem.append(int(re.sub('[a-zA-Z ]', '', i)))
+            if 'mib' in i.lower():  # 检查配置项中是否包含mib（以mib为单位的内存配置）。lower()方法将配置项转换为小写，以忽略大小写
+                default_gpu_mem.append(int(re.sub('[a-zA-Z ]', '', i)))  # 提取其中的数字部分，并将它作为整数添加到default_gpu_mem列表中
             else:
-                default_gpu_mem.append(int(re.sub('[a-zA-Z ]', '', i)) * 1000)
+                default_gpu_mem.append(int(re.sub('[a-zA-Z ]', '', i)) * 1000)  # 在这种情况下，提取数字部分并乘以1000，将内存配置转换为以mib为单位
     while len(default_gpu_mem) < len(total_mem):
-        default_gpu_mem.append(0)
+        default_gpu_mem.append(0)  # 保证default_gpu_mem列表的长度与total_mem列表的长度相同，不相同用0配置
 
+    # 获取系统的总CPU内存大小（以MB为单位）
+    # psutil.virtual_memory().total从虚拟内存信息中获取系统的总内存大小（以字节为单位）
     total_cpu_mem = math.floor(psutil.virtual_memory().total / (1024 * 1024))
     if shared.args.cpu_memory is not None:
-        default_cpu_mem = re.sub('[a-zA-Z ]', '', shared.args.cpu_memory)
+        default_cpu_mem = re.sub('[a-zA-Z ]', '', shared.args.cpu_memory)  # 同上取cpu内存数字部分
     else:
         default_cpu_mem = 0
 
+    # 使用Gradio库创建了一个包含多个嵌套布局的UI组件，用于显示模型选择的下拉菜单
     with gr.Row():
         with gr.Column():
             with gr.Row():
@@ -257,12 +271,15 @@ def create_model_menus():
             with gr.Row():
                 shared.gradio['model_status'] = gr.Markdown('No model is loaded' if shared.model_name == 'None' else 'Ready')
 
+    # 在用户选择不同的模型加载器选项时，动态显示或隐藏与加载器相关的参数，以便用户能够更灵活地配置和选择不同的加载器设置
     shared.gradio['loader'].change(loaders.make_loader_params_visible, shared.gradio['loader'], [shared.gradio[k] for k in loaders.get_all_params()])
 
     # In this event handler, the interface state is read and updated
     # with the model defaults (if any), and then the model is loaded
     # unless "autoload_model" is unchecked
-    shared.gradio['model_menu'].change(
+    # 在此事件处理程序中，读取并更新接口状态
+    # 使用模型默认值(如果有的话)，然后加载模型
+    shared.gradio['model_menu'].change(   # change方法为模型选择的下拉菜单添加一个回调函数
         ui.gather_interface_values, [shared.gradio[k] for k in shared.input_elements], shared.gradio['interface_state']).then(
         apply_model_settings_to_state, [shared.gradio[k] for k in ['model_menu', 'interface_state']], shared.gradio['interface_state']).then(
         ui.apply_interface_values, shared.gradio['interface_state'], [shared.gradio[k] for k in ui.list_interface_input_elements(chat=shared.is_chat())], show_progress=False).then(
@@ -939,6 +956,7 @@ def create_interface():
 
 if __name__ == "__main__":
     # Loading custom settings
+    # 加载自定义设置
     settings_file = None
     if shared.args.settings is not None and Path(shared.args.settings).exists():
         settings_file = Path(shared.args.settings)
@@ -948,42 +966,50 @@ if __name__ == "__main__":
         settings_file = Path('settings.json')
 
     if settings_file is not None:
-        logger.info(f"Loading settings from {settings_file}...")
+        logger.info(f"Loading settings from {settings_file}...") # logger对象记录一个日志信息，用logger.info的方法输出
         file_contents = open(settings_file, 'r', encoding='utf-8').read()
+        # 根据设置文件的后缀来决定使用'json'还是'yaml'模块来解析文件内容，以字典格式存在new_settings中
         new_settings = json.loads(file_contents) if settings_file.suffix == "json" else yaml.safe_load(file_contents)
         for item in new_settings:
-            shared.settings[item] = new_settings[item]
+            shared.settings[item] = new_settings[item]  # 将自定义设置中的每个键值对更新到shared.settings对象中，实现了将新的设置应用到应用程序中
 
-    # Set default model settings based on settings file
+    # Set default model settings based on settings file 根据设置文件设置模型默认设置
+    # 对shared.model_config字典进行了更新，添加了一个名为'.*'的键，并设置了与之对应的值为一个字典，包含模型配置的默认值
     shared.model_config['.*'] = {
         'wbits': 'None',
-        'model_type': 'None',
+        'model_type': 'None',  # 模型类型
         'groupsize': 'None',
         'pre_layer': 0,
-        'mode': shared.settings['mode'],
-        'skip_special_tokens': shared.settings['skip_special_tokens'],
-        'custom_stopping_strings': shared.settings['custom_stopping_strings'],
-        'truncation_length': shared.settings['truncation_length'],
+        'mode': shared.settings['mode'],  # 模式
+        'skip_special_tokens': shared.settings['skip_special_tokens'],  # 跳过特殊标记
+        'custom_stopping_strings': shared.settings['custom_stopping_strings'],  # 自定义停止字符
+        'truncation_length': shared.settings['truncation_length'],  # 截断长度
     }
 
+    # move_to_end方法将字典shared.model_config中的特定键移到字典的开头位置
+    # last=False: 这是一个可选参数，默认为True，如果设置为False，则将键移动到字典的开头位置；
+    # 如果设置为True，则将键移动到字典的末尾位置
     shared.model_config.move_to_end('.*', last=False)  # Move to the beginning
 
     # Default extensions
+    # 默认扩展名
     extensions_module.available_extensions = utils.get_available_extensions()
-    if shared.is_chat():
+    if shared.is_chat(): # shared时gradio的一个共享对象，判断当前是否处于聊天模式
         for extension in shared.settings['chat_default_extensions']:
-            shared.args.extensions = shared.args.extensions or []
-            if extension not in shared.args.extensions:
+            shared.args.extensions = shared.args.extensions or []  # 初始化shared.args.extensions
+            if extension not in shared.args.extensions:  # 如果扩展名extension不在列表中，则加入
                 shared.args.extensions.append(extension)
+    # 如果不是聊天模式，则遍历shared.settings['default_extensions']中的元素加入shared.args.extensions变量中
     else:
         for extension in shared.settings['default_extensions']:
             shared.args.extensions = shared.args.extensions or []
             if extension not in shared.args.extensions:
                 shared.args.extensions.append(extension)
 
-    available_models = utils.get_available_models()
+    available_models = utils.get_available_models()  # 获取可用模型列表
 
     # Model defined through --model
+    # 通过 --model 定义模型
     if shared.args.model is not None:
         shared.model_name = shared.args.model
 
@@ -992,6 +1018,7 @@ if __name__ == "__main__":
         shared.model_name = available_models[0]
 
     # Select the model from a command-line menu
+    # 从命令行菜单中选择模型
     elif shared.args.model_menu:
         if len(available_models) == 0:
             logger.error('No models are available! Please download at least one.')
@@ -1019,6 +1046,7 @@ if __name__ == "__main__":
             add_lora_to_model(shared.args.lora)
 
     # Force a character to be loaded
+    # 强制加载一个字符
     if shared.is_chat():
         shared.persistent_interface_state.update({
             'mode': shared.settings['mode'],
@@ -1032,6 +1060,7 @@ if __name__ == "__main__":
 
     shared.generation_lock = Lock()
     # Launch the web UI
+    # 启动web UI
     create_interface()
     while True:
         time.sleep(0.5)

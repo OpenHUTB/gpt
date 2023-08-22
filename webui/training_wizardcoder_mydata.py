@@ -13,12 +13,13 @@ sys.path.append('..')
 
 
 # 执行训练：
-# --do_train  --train_file D:\work\workspace\gpt\webui\data\alpaca_data.json --valid_file D:\work\workspace\gpt\webui\data\alpaca_data.json
+# --do_train --model_name C:\Buffer\gpt\gpt-main\webui\models\WizardCoder-15B-V1.0 --train_file C:\Buffer\gpt\gpt-main\webui\data\scenario_generation.json --valid_file C:\Buffer\gpt\gpt-main\webui\data\scenario_generation.json
+# 一秒钟更新一次GPU信息：nvidia-smi -l 1
 
 # 不支持执行量化模型（TheBloke/WizardCoder-15B-1.0-GPTQ）的预测
 
 # 执行推断：
-# --do_predict --prompt  创建一个驾驶场景对象scenario，并在场景中创建了一个车辆对象v1。
+# --do_predict --model_name C:\Buffer\gpt\gpt-main\webui\models\WizardCoder-15B-V1.0 --prompt  创建一个驾驶场景对象scenario，并在场景中创建了一个车辆对象v1。  --output_dir C:\\Buffer\\gpt\\gpt-main\\webui\\outputs-finetuned-wizardcoder\\
 # 需要将某次模型训练的检查点文件复制到./outputs-finetuned-wizardcoder/目录下，否则出现
 # Can't find 'adapter_config.json' at './outputs-finetuned-wizardcoder/'
 
