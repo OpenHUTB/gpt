@@ -11,6 +11,7 @@ function main(varargin)
 % todo: 虚幻引擎启动时候过长，已经无响应了，需要杀死进程重新启动
 % 有时候启动没有道路
 % 去掉网页的两次点击
+warning off;
 
 if nargin < 1
     exe_path = 'WindowsNoEditor\AutoVrtlEnv.exe';
@@ -128,6 +129,8 @@ designer.Simulator.run()
 % pause(3);
 % ue_viewer.delete()  % 关闭虚幻引擎场景查看器（成功）
 rmpref('Simulation3D', 'UnrealPath')
+
+warning on;
 
 end
 

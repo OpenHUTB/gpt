@@ -21,6 +21,9 @@ path = fullfile(ue_proj_dir, project_name, 'AutoVrtlEnv.uproject');
 editor = sim3d.Editor(path);
 open(editor);
 
+% 这个时候通过右键AutoVrtEnv.uproject，选择 Generate Visual Stuudio project files，
+% 生成 AutoVrtEnv.sln后可以通过双击打开vs2019。
+
 % 参数配置
 % 参考：https://ww2.mathworks.cn/help/releases/R2022b/driving/ug/package-custom-scenes-into-executable.html
 % https://docs.unrealengine.com/4.26/zh-CN/SharingAndReleasing/PixelStreaming/PixelStreamingIntro/

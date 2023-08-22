@@ -64,3 +64,26 @@ World.start();  % 打开虚幻引擎（黑色）界面
 toolbox\shared\sim3d\sim3d\+sim3d\+engine\Env.m 
 
 
+### C++接口
+C++和虚幻引擎进行交互的接口所在目录
+```text
+matlab\SupportPackages\toolbox\shared\sim3dprojects\spkg\plugins\mw_simulation\MathWorksSimulation\Source\MathWorksSimulation\Public\Sim3dActor.h
+```
+
+### 库文件
+`UE4Editor-MathWorksSimulation.dll`和`UE4Editor-MathWorksSimulation.pdb`文件所在的目录
+```text
+matlab\SupportPackages\toolbox\shared\sim3dprojects\spkg\plugins\mw_simulation\MathWorksSimulation\Binaries\Win64
+```
+dll文件是运行时需要调用的动态链接库，为函数可执行的代码文件。
+
+pdb为程序数据二进制文件，pdb文件保存着调试和项目状态信息，包含了编译后程序指向源代码的位置信息，用于调试的时候定位到源代码，主要是用来方便调试的。release后建议删掉，有利于保护程序。
+.pdb 文件包含指向源代码存储库的指针，以及用于从该存储库检索源代码的命令。
+
+使用vs2019打开后，有两个工程`Engine/UE4`和`Games/AutoVrtEnv`。
+
+### 虚幻引擎
+调用的虚幻引擎代码位于：
+```text
+UE_4.26\Engine\Source\Developer\MaterialUtilities\Private\MaterialUtilities.cpp
+```
