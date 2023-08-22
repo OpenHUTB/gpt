@@ -24,6 +24,12 @@ open(editor);
 % 参数配置
 % 参考：https://ww2.mathworks.cn/help/releases/R2022b/driving/ug/package-custom-scenes-into-executable.html
 % https://docs.unrealengine.com/4.26/zh-CN/SharingAndReleasing/PixelStreaming/PixelStreamingIntro/
+
+% 取消 引擎（Engine） > 输入类型（Input category） 下启用 固定显示触控界面（Always Show Touch Interface） 设置。
+% 否则左右各有两个触控界面的圆圈
+% 导出目录：D:\work\workspace\gpt\sim
+% 覆盖后，然后用git 进行revert
+
 end
 
 
