@@ -106,10 +106,18 @@ designer = driving.internal.scenarioApp.Designer(scenario);
 % designer.getTitle();
 
 % 启动虚幻引擎场景查看器
+% 如果不出现，则调试 D:\work\matlab\toolbox\shared\drivingscenario\+driving\+scenario\+internal\GamingEngineScenarioAnimator.m
+% 中的 setupCommandReaderAndWriter()
 ue_viewer = designer.getGamingEngineViewer(1, 1);
 % ue_viewer.start();  % 开始仿真（失败）
 
 % 开始仿真（相当于点击驾驶场景设计器菜单中的运行）
+
+% sim_start_time = cputime
+% matlab\toolbox\shared\drivingscenario\+driving\+internal\+scenarioApp\Display.m
+% 有属性Simulator
+% matlab\toolbox\shared\drivingscenario\+driving\+internal\+scenarioApp\Simulator.m
+% 有方法run()
 designer.Simulator.run()
 
 % 使用自带浏览器查看：127.0.0.1
@@ -118,17 +126,6 @@ designer.Simulator.run()
 % pause(3);
 % ue_viewer.delete()  % 关闭虚幻引擎场景查看器（成功）
 rmpref('Simulation3D', 'UnrealPath')
-% clear
 
 end
-
-
-
-
-
-
-
-
-
-
 
