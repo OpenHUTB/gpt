@@ -11,9 +11,16 @@ parser.add_argument("--prompt", type=str, default="写个matlab的冒泡排序�
 args = parser.parse_args()
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+
+
 client.connect((target_host, target_port))
+
 client.send(args.prompt.encode('utf-8'))
+
 response = client.recv(4096)
 print(response.decode())
+
+print('gpt_end')
 client.close()
 
