@@ -1,0 +1,142 @@
+pull_request_rules:
+  - name: automatic merge for develop when CI passes and 1 reviews
+    conditions:
+      - "approved-reviews-by>=1"
+      - check-success=Travis CI - Pull Request
+      - base=develop
+    actions:
+      merge:
+        method: merge
+  - name: delete head branch after merged
+    conditions:
+      - merged
+    actions:
+      delete_head_branch: {}
+  - name: "add label=auto-merge for PR by mergify"
+    conditions:
+      - author=mergify[bot]
+    actions:
+      label:
+        add: ["auto-merge"]
+  - name: warn on conflicts
+    conditions:
+      - conflict
+    actions:
+      comment:
+        message: This pull request is now in conflict :(
+      label:
+        add: ["conflicts"]
+  - name: unlabel conflicts
+    conditions:
+      - -conflict
+    actions:
+      label:
+        remove: ["conflicts"]
+  - name: "auto add label=Dataset"
+    conditions:
+      - files~=^dataset/
+    actions:
+      label:
+        add: ["Dataset"]
+  - name: "auto add label=S2T"
+    conditions:
+      - files~=^paddlespeech/s2t/
+    actions:
+      label:
+        add: ["S2T"]
+  - name: "auto add label=T2S"
+    conditions:
+      - files~=^paddlespeech/t2s/
+    actions:
+      label:
+        add: ["T2S"]
+  - name: "auto add label=Audio"
+    conditions:
+      - files~=^paddlespeech/audio/
+    actions:
+      label:
+        add: ["Audio"]
+  - name: "auto add label=Vector"
+    conditions:
+      - files~=^paddlespeech/vector/
+    actions:
+      label:
+        add: ["Vector"]
+  - name: "auto add label=Text"
+    conditions:
+      - files~=^paddlespeech/text/
+    actions:
+      label:
+        add: ["Text"]
+  - name: "auto add label=Example"
+    conditions:
+      - files~=^examples/
+    actions:
+      label:
+        add: ["Example"]
+  - name: "auto add label=CLI"
+    conditions:
+      - files~=^paddlespeech/cli
+    actions:
+      label:
+        add: ["CLI"]
+  - name: "auto add label=Server"
+    conditions:
+      - files~=^paddlespeech/server
+    actions:
+      label:
+        add: ["Server"]
+  - name: "auto add label=Demo"
+    conditions:
+      - files~=^demos/
+    actions:
+      label:
+        add: ["Demo"]
+  - name: "auto add label=README"
+    conditions:
+      - files~=(README.md|READEME_cn.md)
+    actions:
+      label:
+        add: ["README"]
+  - name: "auto add label=Documentation"
+    conditions:
+      - files~=^(docs/|CHANGELOG.md)
+    actions:
+      label:
+        add: ["Documentation"]
+  - name: "auto add label=CI"
+    conditions:
+      - files~=^(.circleci/|ci/|.github/|.travis.yml|.travis|env.sh)
+    actions:
+      label:
+        add: ["CI"]
+  - name: "auto add label=Installation"
+    conditions:
+      - files~=^(tools/|setup.py|setup.cfg|setup_audio.py)
+    actions:
+      label:
+        add: ["Installation"]
+  - name: "auto add label=Test"
+    conditions:
+      - files~=^(tests/)
+    actions:
+      label:
+        add: ["Test"]
+  - name: "auto add label=mergify"
+    conditions:
+      - files~=^.mergify.yml
+    actions:
+      label:
+        add: ["mergify"]
+  - name: "auto add label=Docker"
+    conditions:
+      - files~=^docker/
+    actions:
+      label:
+        add: ["Docker"]
+  - name: "auto add label=Deployment"
+    conditions:
+      - files~=^runtime/
+    actions:
+      label:
+        add: ["Deployment"]

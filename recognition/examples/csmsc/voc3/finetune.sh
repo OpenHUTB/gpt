@@ -1,0 +1,1 @@
+../voc5/finetune.sh
