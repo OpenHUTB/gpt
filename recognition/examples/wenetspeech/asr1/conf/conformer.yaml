@@ -1,0 +1,94 @@
+############################################
+#           Network Architecture           #
+############################################
+cmvn_file_type: "json"
+# encoder related
+encoder: conformer
+encoder_conf:
+    output_size: 512    # dimension of attention
+    attention_heads: 8
+    linear_units: 2048  # the number of units of position-wise feed forward
+    num_blocks: 12      # the number of encoder blocks
+    dropout_rate: 0.1
+    positional_dropout_rate: 0.1
+    attention_dropout_rate: 0.0
+    input_layer: conv2d # encoder input type, you can chose conv2d, conv2d6 and conv2d8
+    normalize_before: True
+    use_cnn_module: True
+    cnn_module_kernel: 15
+    cnn_module_norm: layer_norm
+    activation_type: swish
+    pos_enc_layer_type: rel_pos
+    selfattention_layer_type: rel_selfattn
+
+# decoder related
+decoder: transformer
+decoder_conf:
+    attention_heads: 8
+    linear_units: 2048
+    num_blocks: 6
+    dropout_rate: 0.1
+    positional_dropout_rate: 0.1
+    self_attention_dropout_rate: 0.0
+    src_attention_dropout_rate: 0.0
+
+# hybrid CTC/attention
+model_conf:
+    ctc_weight: 0.3
+    lsm_weight: 0.1     # label smoothing option
+    length_normalized_loss: false
+    init_type: 'kaiming_uniform' # !Warning: need to convergence
+
+# https://yaml.org/type/float.html
+###########################################
+#                   Data                  #
+###########################################
+train_manifest: data/train_l/data.list
+dev_manifest: data/dev/data.list
+test_manifest: data/test_meeting/data.list
+
+###########################################
+#              Dataloader                 #
+###########################################
+use_stream_data: True
+unit_type: 'char'
+vocab_filepath: data/lang_char/vocab.txt 
+preprocess_config: conf/preprocess.yaml
+cmvn_file: data/mean_std.json
+spm_model_prefix: ''
+feat_dim: 80
+stride_ms: 10.0
+window_ms: 25.0
+dither: 0.1
+sortagrad: 0 # Feed samples from shortest to longest ; -1: enabled for all epochs, 0: disabled, other: enabled for 'other' epochs 
+batch_size: 32
+minlen_in: 10
+maxlen_in: 1200  # if input length(number of frames) > maxlen-in, data is automatically removed
+minlen_out: 0
+maxlen_out: 150  # if output length(number of tokens) > maxlen-out, data is automatically removed
+resample_rate: 16000
+shuffle_size: 1500 # read number of 'shuffle_size' data as a chunk, shuffle the data in the chunk
+sort_size: 1000  # read number of 'sort_size' data as a chunk, sort the data in the chunk 
+num_workers: 8
+prefetch_factor: 10
+dist_sampler: True
+num_encs: 1
+
+###########################################
+#                 Training                #
+###########################################
+n_epoch: 32 
+accum_grad: 32
+global_grad_clip: 5.0
+log_interval: 100
+checkpoint:
+  kbest_n: 50
+  latest_n: 5
+optim: adam
+optim_conf:
+  lr: 0.001
+  weight_decay: 1.0e-6
+scheduler: warmuplr     
+scheduler_conf:
+  warmup_steps: 5000
+  lr_decay: 1.0

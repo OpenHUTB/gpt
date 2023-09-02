@@ -1,0 +1,1 @@
+../../vc0/local/train.sh

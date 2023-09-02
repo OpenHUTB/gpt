@@ -1,0 +1,1 @@
+../../../aishell3/ernie_sat/local/synthesize.sh

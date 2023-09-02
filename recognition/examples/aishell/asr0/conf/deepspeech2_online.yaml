@@ -1,0 +1,67 @@
+# https://yaml.org/type/float.html
+###########################################
+#                   Data                  #
+###########################################
+train_manifest: data/manifest.train
+dev_manifest: data/manifest.dev
+test_manifest: data/manifest.test
+min_input_len: 0.0
+max_input_len: 27.0 # second
+min_output_len: 0.0
+max_output_len: .inf
+min_output_input_ratio: 0.00
+max_output_input_ratio: .inf
+
+###########################################
+#              Dataloader                 #
+###########################################
+vocab_filepath: data/lang_char/vocab.txt 
+spm_model_prefix: ''
+unit_type: 'char'
+preprocess_config: conf/preprocess.yaml
+feat_dim: 161
+stride_ms: 10.0
+window_ms: 25.0
+sortagrad: 0 # Feed samples from shortest to longest ; -1: enabled for all epochs, 0: disabled, other: enabled for 'other' epochs 
+batch_size: 64
+maxlen_in: 512  # if input length  > maxlen-in, batchsize is automatically reduced
+maxlen_out: 150  # if output length > maxlen-out, batchsize is automatically reduced
+minibatches: 0 # for debug
+batch_count: auto
+batch_bins: 0 
+batch_frames_in: 0
+batch_frames_out: 0
+batch_frames_inout: 0
+num_workers: 8
+subsampling_factor: 1
+num_encs: 1
+
+############################################
+#           Network Architecture           #
+############################################
+num_conv_layers: 2
+num_rnn_layers: 5
+rnn_layer_size: 1024
+rnn_direction: forward # [forward, bidirect]
+num_fc_layers: 0
+fc_layers_size_list: -1,
+use_gru: False 
+blank_id: 0
+  
+  
+###########################################
+#                Training                 #
+###########################################
+n_epoch: 30
+accum_grad: 1
+lr: 5.0e-4
+lr_decay: 0.93
+weight_decay: 1.0e-6
+global_grad_clip: 3.0
+dist_sampler: False
+log_interval: 100
+checkpoint:
+  kbest_n: 50
+  latest_n: 5
+
+  
