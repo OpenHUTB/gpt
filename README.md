@@ -4,6 +4,8 @@
 
 # 流程
 
+<img src=fig/pipeline.png alt="图片替换文本" width="780" />
+
 技术路线包括以下三个步骤：
 
 ## [语音识别](https://github.com/OpenHUTB/gpt/tree/main/recognition) 
