@@ -1,6 +1,28 @@
 
 
-# 环境配置
+# 运行
+
+## 环境配置
+经过测试的Python版本为 3.8，安装依赖包命令：
+```shell
+pip install -r requirements.txt
+```
+
+## 运行步骤
+1. 语音识别
+```shell
+python generateText.py data/create_scenario.wav
+```
+输出：`创建一个驾驶场景对象并在场景中创建一个车辆对象`。
+
+2. 语音合成
+```shell
+python generateVoice.py 创建一个驾驶场景对象并在场景中创建一个车辆对象 data/output.wav
+```
+输出为文字的输出音频文件`output.wave`。
+
+
+# 其他配置
 
 ## Docker 配置
 1. [win10上配置Docker](https://blog.csdn.net/weixin_44649780/article/details/128335908) 。
