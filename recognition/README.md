@@ -7,6 +7,7 @@
 ```shell
 pip install -r requirements.txt
 ```
+服务器地址：`C:\Anaconda\envs\padpkg\python.exe`。
 
 ## 运行步骤
 1. 语音识别

@@ -6,7 +6,9 @@ function main(varargin)
 % 运行自定义场景：main('C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor\XianJia.exe')
 
 % 常见问题：
-% 没有启动图形界面，只有数据发送：找不到exe文件
+% 没有启动图形界面，只有数据发送：
+% 1. 找不到exe文件
+% 2. 启动错了matlab，需要启动定制的matlab
 
 % todo: 虚幻引擎启动时候过长，已经无响应了，需要杀死进程重新启动
 % 有时候启动没有道路
@@ -56,7 +58,7 @@ end
 
 
 %% 调用虚幻引擎
-% % 参考：toolbox\shared\drivingscenario\+driving\+scenario\+internal\GamingEngineScenarioAnimator.m
+% % 参考：edit(fullfile(matlabroot, 'toolbox\shared\drivingscenario\+driving\+scenario\+internal\GamingEngineScenarioAnimator.m'))
 % World = sim3d.World(sim3d.engine.Env.AutomotiveExe(), "/Game/Maps/EmptyGrass4k4k"); % EmptyGrass4k4k or BlackLake
 % World.start();  % 打开虚幻引擎（黑色）界面
 
@@ -66,7 +68,7 @@ end
 % getpref('Simulation3D', 'UnrealPath');
 
 % 用于像素流转发
-ExecCmds = " -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";
+ExecCmds = " -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";  % -RenderOffScreen
 setpref('Simulation3D', 'ExecCmds', ExecCmds)
 
 % ExecutablePath' 的值必须满足函数: @(x)isstring(x)||isempty(x)
