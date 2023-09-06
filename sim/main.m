@@ -10,13 +10,18 @@ function main(varargin)
 % 1. 找不到exe文件
 % 2. 启动错了matlab，需要启动定制的matlab
 
+% 启动图形界面且有动画，但浏览器查看不到
+% 解决：使用导出的exe覆盖当前目录下的exe、使用有轨迹运行的代码
+
 % todo: 虚幻引擎启动时候过长，已经无响应了，需要杀死进程重新启动
 % 有时候启动没有道路
 % 去掉网页的两次点击
 warning off;
 
+cur_dir = fileparts(mfilename("fullpath"));
+
 if nargin < 1
-    exe_path = 'WindowsNoEditor\AutoVrtlEnv.exe';
+    exe_path = fullfile(cur_dir, 'WindowsNoEditor', 'AutoVrtlEnv.exe');
 else
     exe_path = varargin{1};
 end
@@ -69,6 +74,8 @@ end
 
 % 用于像素流转发
 ExecCmds = " -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888";  % -RenderOffScreen
+% log 日志
+% -RenderOffScreen 是否显示ue4服务窗口
 setpref('Simulation3D', 'ExecCmds', ExecCmds)
 
 % ExecutablePath' 的值必须满足函数: @(x)isstring(x)||isempty(x)
