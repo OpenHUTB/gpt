@@ -40,7 +40,6 @@
 7. [以编程方式创建驾驶场景](https://ww2.mathworks.cn/help/driving/ug/create-driving-scenario-programmatically.html) ；
 8. [生成三维模型](https://github.com/uezo/ChatdollKit) ；
 9. 预测性导航（不同时间）：下午怎么走；
-
 10. 延长红绿灯；增加一倍车辆；
 11. *构建西二环和桐梓坡路口、工商大学地铁站路口、西二环和岳麓大道路口、望月路和岳麓大道路口的DrivingScenario对象（虚幻效果）；
 12. 进行场景的修改的监听；
@@ -48,7 +47,8 @@
 14. *立交桥中增加（删除）一条路，看对交通的影响；增加新的车道；
 15. *湖南工商大学内部星期一 9点-10点 开学（一般）一倍的场景：生成配置文件、像素流转发；
 16. *晚上西二环渣土车；
-17. 增加场景车的声音；
+17. 转发场景中车的声音；
+18. 设置[仿真环境](https://ww2.mathworks.cn/help/releases/R2022b/driving/ref/simulation3dsceneconfiguration.html) ：比如天气、雨、雾、云、太阳高度等，文件位于`matlab\toolbox\driving\driving\drivingsim3d.slx`中的`Simulation 3D Scene Configuration`；
 
 
 # 环境配置
