@@ -1,6 +1,7 @@
 % 生成日出的场景
 % 一天时间的命名参考：http://www.guoxue.com/?p=4025
 fname = 'auto_created_model';
+close_system(fname, 0);
 h = new_system(fname);
 
 % 要获取库模块路径，可以将鼠标悬停在库浏览器中的模块上

@@ -12,7 +12,9 @@ rehash toolboxcache
 % 将支持包文件拷贝到目的文件夹
 % 要确保虚幻引擎中的插件目录"C:\Program Files\Epic Games\UE_4.26\Engine\Plugins\MathWorks"之前没有，否则直接报错"断言失败"
 % 原始工程位于：fullfile(matlabshared.supportpkg.getSupportPackageRoot(),"toolbox","shared","sim3dprojects","spkg")
-sim3d.utils.copyExampleSim3dProject(ue_proj_dir, VerboseOutput=true)
+if ~exist(ue_proj_dir, 'dir')
+    sim3d.utils.copyExampleSim3dProject(ue_proj_dir, VerboseOutput=true)
+end
 
 
 %% 导出成可执行文件

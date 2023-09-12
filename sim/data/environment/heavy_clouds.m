@@ -1,5 +1,6 @@
 % 生成多云的场景
 fname = 'auto_created_model';
+close_system(fname, 0)
 h = new_system(fname);
 
 % 要获取库模块路径，可以将鼠标悬停在库浏览器中的模块上
