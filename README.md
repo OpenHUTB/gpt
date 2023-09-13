@@ -49,6 +49,7 @@
 16. *晚上西二环渣土车；
 17. 转发场景中车的声音；
 18. 设置[仿真环境](https://ww2.mathworks.cn/help/releases/R2022b/driving/ref/simulation3dsceneconfiguration.html) ：比如天气、雨、雾、云、太阳高度等，文件位于`matlab\toolbox\driving\driving\drivingsim3d.slx`中的`Simulation 3D Scene Configuration`；
+19. 控制相机视角变化；
 
 
 # 环境配置

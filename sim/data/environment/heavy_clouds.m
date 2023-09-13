@@ -17,6 +17,8 @@ add_block('drivingsim3d/Simulation 3D Scene Configuration', 'auto_created_model/
 % 获取三维场景配置模块的对话框参数列表。
 % dialog_params = get_param('auto_created_model/test', 'DialogParameters');
 
+set_param('auto_created_model/test', 'SceneDesc', 'Virtual Mcity');
+
 set_param('auto_created_model/test', 'EnableWeather', 'on');
 set_param('auto_created_model/test', 'clouds', '100');
 

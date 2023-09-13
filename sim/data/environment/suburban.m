@@ -1,4 +1,6 @@
-% 生成城市场景
+% 生成郊区场景
+% 运行之前需要下载地图：sim3d.maps.Map.download('Suburban scene')
+
 dbclear if error
 fname = 'auto_created_model';
 close_system(fname, 0)
@@ -10,7 +12,7 @@ add_block('drivingsim3d/Simulation 3D Scene Configuration', 'auto_created_model/
 % 获取三维场景配置模块的对话框参数列表。
 % dialog_params = get_param('auto_created_model/test', 'DialogParameters');
 
-set_param('auto_created_model/test', 'SceneDesc', 'US city block');
+set_param('auto_created_model/test', 'SceneDesc', 'Suburban scene');
 % "D:\work\workspace\gpt\sim\WindowsNoEditor\AutoVrtlEnv_with_cmd.exe" -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888
 % set_param('auto_created_model/test', 'ScenePath', 'D:\project\all_maps\WindowsNoEditor\AutoVrtlEnv.exe');  % Scene view— 配置显示场景的虚拟摄像机的放置
 
