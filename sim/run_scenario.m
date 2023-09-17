@@ -37,7 +37,7 @@ if isempty(WINWORD)  % 进程不存在则启动，不需要杀
     exe_dir = fileparts(exe_path);
     signalling_server_path = fullfile(exe_dir, 'Engine', 'Source', 'Programs', ...
         'PixelStreaming', 'WebServers', 'SignallingWebServer', 'run.bat');
-    system([signalling_server_path ' &']);  % 后台执行
+    system([signalling_server_path ' &']);  % 后台执行，如果一闪而过可能是node没有安装
 
     pause(3);
     % 杀死之前存在的信令服务
