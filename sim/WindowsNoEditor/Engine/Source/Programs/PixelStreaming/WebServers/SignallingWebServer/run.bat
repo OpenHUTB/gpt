@@ -10,8 +10,8 @@ call setup.bat
 
 title Cirrus
 
-::Run node server
-::If running with frontend web server and accessing outside of localhost pass in --publicIp=<ip_of_machine>
+::运行 node 服务器
+::如果使用前端web服务器运行并在loalhost外部访问，则传入  --publicIp=<ip_of_machine>
 node cirrus %*
 
 popd
