@@ -7,6 +7,8 @@ function run_scenario(scenario, varargin)
 
 % 启动图形界面且有动画，但浏览器查看不到
 % 解决：使用导出的exe覆盖当前目录下的exe、使用有轨迹运行的代码
+%       关闭系统的网络代理
+%       重启matlab
 
 % todo: 虚幻引擎启动时候过长，已经无响应了，需要杀死进程重新启动
 % 有时候启动没有道路
@@ -25,36 +27,6 @@ end
 % 如果有dbstop if error则运行报错
 dbclear if error
 
-
-%% 杀死之前已有的进程
-% proj_dir = fileparts(fileparts(mfilename('fullpath')));
-% addpath(fullfile(proj_dir, 'utils'));
-[~,cmdout] = system('tasklist');
-
-cmdout = split(cmdout,strcat(10));
-WINWORD = cmdout(contains(cmdout, 'node.exe'),:);
-if isempty(WINWORD)  % 进程不存在则启动，不需要杀
-    exe_dir = fileparts(exe_path);
-    signalling_server_path = fullfile(exe_dir, 'Engine', 'Source', 'Programs', ...
-        'PixelStreaming', 'WebServers', 'SignallingWebServer', 'run.bat');
-    system([signalling_server_path ' &']);  % 后台执行，如果一闪而过可能是node没有安装
-
-    pause(3);
-    % 杀死之前存在的信令服务
-    % kill_process('node.exe');
-    % kill_process('cmd.exe');
-end
-
-% todo: 存在node.exe就不再启动了
-% 杀死之前的循环引擎服务
-% kill_process('AutoVrtlEnv.exe');
-WINWORD = cmdout(contains(cmdout, 'AutoVrtlEnv.exe'),:);
-for i = 1 : numel(WINWORD)
-    cur_process = WINWORD{i};
-    cur_process_info = split( cur_process,' ');
-    % 杀死指定进程
-    system(strcat('taskkill /pid' , 32 , cur_process_info{ find( ismember( cur_process_info, 'Console' ) , 1 ) - 1 } , 32 , ' /f' ) );
-end
 
 
 %% 调用虚幻引擎

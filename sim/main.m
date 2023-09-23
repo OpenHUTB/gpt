@@ -5,14 +5,20 @@ function main(varargin)
 % 运行草地场景：main('D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe')
 % 运行自定义场景：main('C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor\XianJia.exe')
 
+run(fullfile(fileparts(mfilename('fullpath')), "prepare_env.m"));
+
 src_code_path = fullfile(fileparts(mfilename('fullpath')), 'code.m');
 run(src_code_path);
 
-if isempty(varargin)
-    run_scenario(scenario);
-else
-    run_scenario(scenario, varargin);
+if exist("scenario", 'var')
+    if isempty(varargin)
+        run_scenario(scenario);
+    else
+        run_scenario(scenario, varargin);
+    end
 end
+
+
 
 end
 
