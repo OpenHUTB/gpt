@@ -1,6 +1,9 @@
 %% 杀死之前已有的进程
 % proj_dir = fileparts(fileparts(mfilename('fullpath')));
 % addpath(fullfile(proj_dir, 'utils'));
+cur_dir = fileparts(mfilename("fullpath"));
+exe_path = fullfile(cur_dir, 'WindowsNoEditor', 'AutoVrtlEnv.exe');
+
 [~,cmdout] = system('tasklist');
 
 cmdout = split(cmdout,strcat(10));
