@@ -3,7 +3,7 @@
 var webRtcPlayerObj = null;
 var print_stats = false;
 var print_inputs = false;
-var connect_on_load = false;
+var connect_on_load = true; // 去掉start on click点击开始（但是仍需要按开始按钮），参考：https://blog.csdn.net/MAPLE_HY/article/details/112599840
 
 var is_reconnection = false;
 var ws;
@@ -53,6 +53,8 @@ var editTextButton = undefined;
 var hiddenInput = undefined;
 
 var t0 = Date.now();
+
+
 function log(str) {
 	console.log(`${Math.floor(Date.now() - t0)}: ` + str);
 }

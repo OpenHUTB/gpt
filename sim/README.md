@@ -39,6 +39,11 @@ WindowsNoEditor/RoadProject.exe - 快捷方式
 D:\buffer\hutb_scenario\WindowsNoEditor\RoadProject.exe -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888
 ```
 
+增加运行场景的参数：
+```shell
+matlab\toolbox\shared\sim3d\sim3d\+sim3d\World.m -> asCommand(self)
+```
+
 ## 将 simulink 模型导出为.m脚本
 
 
@@ -94,3 +99,7 @@ UE_4.26\Engine\Source\Developer\MaterialUtilities\Private\MaterialUtilities.cpp
 ## 问题
 ```未找到具有匹配签名的方法 ':all:'。```
 原因：存在和matlab同名的类或者方法。
+
+[UE4像素流pixelstream的一些坑](https://blog.csdn.net/MAPLE_HY/article/details/112599840)
+
+[android在局域网连接PixelStreaming 失败](https://blog.csdn.net/maxiaosheng521/article/details/106215330)
