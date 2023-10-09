@@ -4,6 +4,7 @@ function main(varargin)
 % 运行草地场景：main('C:\Buffer\gpt\WindowsNoEditor\AutoVrtlEnv.exe')
 % 运行草地场景：main('D:\project\EmptyGrass4k4k\WindowsNoEditor\AutoVrtlEnv.exe')
 % 运行自定义场景：main('C:\Users\Administrator\Desktop\WorkPlace\DaoBao\WindowsNoEditor\XianJia.exe')
+% 运行湖工商场景：main('D:\project\HutbCity\WindowsNoEditor\AutoVrtlEnv.exe')
 
 run(fullfile(fileparts(mfilename('fullpath')), "prepare_env.m"));
 

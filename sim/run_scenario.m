@@ -48,6 +48,9 @@ setpref('Simulation3D', 'ExecCmds', ExecCmds)
 % ExecutablePath' 的值必须满足函数: @(x)isstring(x)||isempty(x)
 setpref('Simulation3D', 'UnrealPath', exe_path)
 
+% scene_path = "/Game/Maps/HutbCity";
+% setpref('Simulation3D', 'scene_path', scene_path)
+
 % rmpref('Simulation3D', 'UnrealPath')
 
 
