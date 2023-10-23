@@ -1,5 +1,6 @@
 % 生成城市场景
-% 多次运行后出现始终在原点，需要清除之前的内容：clear('all')
+% 第二次运行后出现始终在原点，需要清除之前的内容？：clear global
+% 是车辆走得太快了
 dbclear if error
 fname = 'auto_created_model';
 close_system(fname, 0)
