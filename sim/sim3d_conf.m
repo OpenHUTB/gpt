@@ -1,7 +1,7 @@
 %% matlab环境配置
 % 完成：
-% 1. 将自带工程AutoVrtlEnv工程拷贝到{ue_proj_dir}
-% 2. 启用插件
+% 1. 将自带工程AutoVrtlEnv工程拷贝到{proj_dir}
+% 2. 将插件拷贝到虚幻引擎的软件中{ue_proj_dir}，并启用插件
 function sim3d_conf(proj_dir)
 % 测试：sim3d_conf('C:\Buffer')
 %% 环境配置
