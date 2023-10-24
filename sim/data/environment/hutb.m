@@ -14,7 +14,7 @@ add_block('drivingsim3d/Simulation 3D Scene Configuration', 'auto_created_model/
 % Scene: /Game/Maps/HutbCity
 set_param('auto_created_model/test', 'ProjectFormat', 'Unreal Executable');
 % 场景从百度网盘下载：https://pan.baidu.com/s/1NKF6-ukO_xOPbCWY2IobdA?pwd=aucv
-set_param('auto_created_model/test', 'ProjectName', 'D:\project\HutbCity\WindowsNoEditor\AutoVrtlEnv.exe');
+set_param('auto_created_model/test', 'ProjectName', 'D:\project\WindowsNoEditor\AutoVrtlEnv.exe');
 set_param('auto_created_model/test', 'ScenePath', '/Game/Maps/HutbCity');
 % "D:\work\workspace\gpt\sim\WindowsNoEditor\AutoVrtlEnv_with_cmd.exe" -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888
 % set_param('auto_created_model/test', 'ScenePath', 'D:\project\all_maps\WindowsNoEditor\AutoVrtlEnv.exe');  % Scene view— 配置显示场景的虚拟摄像机的放置
