@@ -19,7 +19,5 @@ if exist("scenario", 'var')
     end
 end
 
-
-
 end
 

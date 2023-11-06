@@ -48,8 +48,8 @@ setpref('Simulation3D', 'ExecCmds', ExecCmds)
 % ExecutablePath' 的值必须满足函数: @(x)isstring(x)||isempty(x)
 setpref('Simulation3D', 'UnrealPath', exe_path)
 
-% scene_path = "/Game/Maps/HutbCity";
-% setpref('Simulation3D', 'scene_path', scene_path)
+scene_path = "/Game/Maps/HutbCity";
+setpref('Simulation3D', 'scene_path', scene_path)
 
 % rmpref('Simulation3D', 'UnrealPath')
 
@@ -71,7 +71,7 @@ setpref('Simulation3D', 'UnrealPath', exe_path)
 
 
 %% 通过代码获得场景的测试用例
-run('./code.m');
+run(fullfile(fileparts(mfilename("fullpath")), 'code.m'));
 
 
 % 生成的场景需要能通过驾驶场景设计器打开
@@ -84,12 +84,15 @@ run('./code.m');
 
 % 构建驾驶场景设计器类
 designer = driving.internal.scenarioApp.Designer(scenario);
+designer.Simulator.Player.Repeat = 1;  % 进行重复仿真（无效）
+
 % 打开图形界面
 % designer.open()
 % designer.getTitle();
 
 % 启动虚幻引擎场景查看器
-% 如果不出现，则调试 D:\work\matlab\toolbox\shared\drivingscenario\+driving\+scenario\+internal\GamingEngineScenarioAnimator.m
+% 如果不出现，则调试 
+% eval(['edit ' fullfile(toolboxdir('shared'), 'drivingscenario', '+driving', '+scenario', '+internal', 'GamingEngineScenarioAnimator.m')])
 % 中的 setupCommandReaderAndWriter() 和 setup(this) 方法
 ue_viewer = designer.getGamingEngineViewer(1, 1);
 

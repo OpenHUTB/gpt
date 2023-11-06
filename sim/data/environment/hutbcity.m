@@ -3,7 +3,7 @@ dbclear if error
 fname = 'run1';
 close_system(fname, 0)
 h = new_system(fname);
-open_system(fname)
+% open_system(fname)
 
 add_block('drivingsim3d/Simulation 3D Vehicle with Ground Following','run1/vehicle1');
 % set_param('run1/vehicle1','InitialPos', [-319,1060,90]);
