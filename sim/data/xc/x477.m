@@ -1,0 +1,30 @@
+% 创建一个驾驶场景,将场景的停止时间设置为 3 秒
+scenario = drivingScenario('StopTime',3)
+% 在场景中增加一条双车道公路
+roadCenters = [0 1 0; 53 1 0];
+laneSpecification = lanespec([1 1]);
+road(scenario,roadCenters,'Lanes',laneSpecification);
+% 添加另一条道路，与第一条道路成直角相交，形成 T 形, 位置为[20 38.4 0; 20 3 0]
+roadCenters = [20 38.4 0; 20 3 0];
+laneSpecification = lanespec(2);
+road(scenario,roadCenters,'Lanes',laneSpecification)
+% 将ego飞行器添加到场景中并定义其航点。将ego车辆的速度设为 20 米/秒，并为自我车辆生成轨迹
+egoVehicle = vehicle(scenario,'ClassID',1, ...
+                    'Position',[1.5 2.5 0]);
+waypoints = [2 3 0; 13 3 0;
+            21 3 0; 31 3 0;
+            43 3 0; 47 3 0];
+speed = 20;
+smoothTrajectory(egoVehicle,waypoints,speed)
+% 在场景中添加一辆非自动驾驶车辆。通过指定进入时间和退出时间的矢量，设置非自动驾驶车辆在模拟过程中生成和解散两次
+% 请注意，每个进入时间值都小于相应的退出时间值
+nonEgovehicle1 = vehicle(scenario,'ClassID',1, ...
+                'Position',[22 30 0],'EntryTime',[0.2 1.4],'ExitTime',[1.0 2.0]);
+% 为non-ego飞行器定义航点。将非目标车辆的速度设为 30 米/秒，并生成其轨迹
+waypoints = [22 35 0; 22 23 0;
+            22 13 0; 22 7 0;
+            18 -0.3 0; 12 -0.8 0; 5 -0.8 0];
+speed = 30;
+smoothTrajectory(nonEgovehicle1,waypoints,speed)
+
+plot(scenario)
